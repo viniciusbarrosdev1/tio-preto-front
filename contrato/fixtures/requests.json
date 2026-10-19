@@ -1,0 +1,7 @@
+[
+  { "id": "req-1", "clientName": "João Silva (fictício)", "phone": "+5544999990001", "itemId": "svc-cabelo", "dayOffset": 1, "time": "10:00", "status": "confirmado" },
+  { "id": "req-2", "clientName": "Marcos Souza (fictício)", "phone": "+5544999990002", "itemId": "svc-barba", "dayOffset": 1, "time": "14:00", "status": "pendente" },
+  { "id": "req-3", "clientName": "Pedro Alves (fictício)", "phone": "+5544999990003", "itemId": "svc-visagista", "dayOffset": 2, "time": "15:00", "status": "pendente" },
+  { "id": "req-4", "clientName": "Lucas Lima (fictício)", "phone": "+5544999990004", "itemId": "svc-wold-money", "dayOffset": -3, "time": "16:00", "status": "faltou" },
+  { "id": "req-5", "clientName": "Lucas Lima (fictício)", "phone": "+5544999990004", "itemId": "svc-cabelo", "dayOffset": 3, "time": "09:00", "status": "pendente" }
+]

@@ -1,0 +1,8 @@
+[
+  { "id": "svc-cabelo", "name": "Cabelo", "description": "Corte masculino na tesoura ou máquina.", "priceCents": 5000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
+  { "id": "svc-barba", "name": "Barba", "description": "Barba alinhada na navalha com toalha quente.", "priceCents": 5000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
+  { "id": "svc-sobrancelha-navalha", "name": "Sobrancelha Navalha", "description": "Design de sobrancelha na navalha.", "priceCents": 3000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
+  { "id": "svc-sobrancelha-cera", "name": "Sobrancelha Cera", "description": "Design de sobrancelha com cera.", "priceCents": 4000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
+  { "id": "svc-wold-money", "name": "Cabelo Wold Money", "description": "O corte da casa, com acabamento completo.", "priceCents": 6000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
+  { "id": "svc-visagista", "name": "Corte Visagista", "description": "Corte pensado para o formato do seu rosto. O valor final é combinado no atendimento.", "priceCents": 25000, "priceType": "from", "durationMinutes": 60, "visible": true }
+]

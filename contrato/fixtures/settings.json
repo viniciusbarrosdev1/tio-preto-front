@@ -1,0 +1,18 @@
+{
+  "businessName": "Barbearia Tio Preto",
+  "city": "Douradina - PR",
+  "whatsapp": "+5544998603404",
+  "instagramUrl": "https://www.instagram.com/tiopretobarbearia/",
+  "mapsUrl": "https://www.google.com/maps/search/?api=1&query=Barbearia+Tio+Preto+Douradina+PR",
+  "notice": "Agenda aberta para as próximas 2 semanas.",
+  "timezone": "America/Sao_Paulo",
+  "defaultHours": [
+    { "start": "09:00", "end": "12:00" },
+    { "start": "13:00", "end": "19:00" }
+  ],
+  "hourExceptions": [],
+  "cancelDeadlineHours": 3,
+  "absenceRule": "Falta sem aviso prévio pode ser cobrada. O valor é combinado diretamente com o Tio Preto.",
+  "consentVersion": "2026-10-v0",
+  "consentText": "Autorizo o uso do meu nome e WhatsApp apenas para agendamento e contato sobre este pedido."
+}

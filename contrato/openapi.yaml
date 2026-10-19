@@ -1,0 +1,492 @@
+openapi: 3.0.3
+info:
+  title: Barbearia Tio Preto - API
+  version: 0.1.0
+  description: |
+    Contrato único da API (v0, sem back implementado). O front mockado segue este contrato.
+    E-01, E-02 e E-03 estão detalhados. E-04 e E-05 estão marcados "v0.1 provisório".
+
+    Convenções:
+    - Telefone sempre E.164 (+5544999990000).
+    - Data e hora em ISO 8601 com fuso, America/Sao_Paulo (-03:00).
+    - Dinheiro em centavos (priceCents).
+    - Erro sempre no formato {code, message, details}.
+
+    Decisões de negócio (apostas a validar com o Tio Preto):
+    - Pedido pendente NÃO segura o horário. Aprovar um segundo pedido no mesmo horário devolve 409 SLOT_UNAVAILABLE.
+    - Prazo de cancelamento é lido na hora do acesso ao link (cancelDeadlineAt).
+    - Ao remarcar ou propor outro horário, o horário antigo continua confirmado até o dono aprovar o novo.
+servers:
+  - url: https://api.tiopretobarbearia.com/v0
+tags:
+  - name: E-01 Cardápio público
+  - name: E-02 Painel do dono
+  - name: E-03 Horário e aviso
+  - name: E-04 Agenda (v0.1 provisório)
+  - name: E-05 Faltas (v0.1 provisório)
+paths:
+  /public/menu:
+    get:
+      tags: [E-01 Cardápio público]
+      summary: Itens visíveis do cardápio, mais contatos e aviso do dia
+      responses:
+        '200':
+          description: Cardápio público
+          content:
+            application/json:
+              schema:
+                type: object
+                required: [items, contacts, notice]
+                properties:
+                  items:
+                    type: array
+                    items: { $ref: '#/components/schemas/MenuItem' }
+                  contacts: { $ref: '#/components/schemas/Contacts' }
+                  notice: { type: string, nullable: true }
+  /auth/login:
+    post:
+      tags: [E-02 Painel do dono]
+      summary: Login do dono. Limite de tentativas, cookie seguro.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [username, password]
+              properties:
+                username: { type: string }
+                password: { type: string }
+      responses:
+        '204': { description: Autenticado (cookie de sessão) }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /admin/menu:
+    get:
+      tags: [E-02 Painel do dono]
+      summary: Todos os itens, inclusive ocultos
+      security: [{ cookieAuth: [] }]
+      responses:
+        '200':
+          description: Itens
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/MenuItem' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [E-02 Painel do dono]
+      summary: Cria item
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MenuItemInput' }
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MenuItem' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /admin/menu/{id}:
+    parameters:
+      - { name: id, in: path, required: true, schema: { type: string } }
+    put:
+      tags: [E-02 Painel do dono]
+      summary: Edita ou oculta item
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/MenuItemInput' }
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/MenuItem' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [E-02 Painel do dono]
+      summary: Remove item
+      security: [{ cookieAuth: [] }]
+      responses:
+        '204': { description: Removido }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+  /admin/settings:
+    get:
+      tags: [E-03 Horário e aviso]
+      summary: Horário padrão, exceções, aviso e prazo de cancelamento
+      security: [{ cookieAuth: [] }]
+      responses:
+        '200':
+          description: Configuração
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Settings' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    put:
+      tags: [E-03 Horário e aviso]
+      summary: Atualiza configuração
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/Settings' }
+      responses:
+        '200':
+          description: Atualizada
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Settings' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+  /public/slots:
+    get:
+      tags: [E-03 Horário e aviso]
+      summary: Horários livres de um dia. Só "confirmado" e "bloqueado" ocupam.
+      parameters:
+        - { name: date, in: query, required: true, schema: { type: string, format: date } }
+        - { name: itemId, in: query, required: true, schema: { type: string } }
+      responses:
+        '200':
+          description: Horários
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  date: { type: string, format: date }
+                  slots:
+                    type: array
+                    items: { $ref: '#/components/schemas/Slot' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+  /public/requests:
+    post:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Cliente pede horário. Número bloqueado recebe resposta neutra.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateRequest' }
+      responses:
+        '201':
+          description: Pedido recebido (pendente)
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicRequest' }
+        '400': { $ref: '#/components/responses/ValidationError' }
+        '409': { $ref: '#/components/responses/SlotUnavailable' }
+        '422': { $ref: '#/components/responses/OutsideHours' }
+        '429': { $ref: '#/components/responses/TooManyRequests' }
+  /public/requests/{token}:
+    parameters:
+      - { name: token, in: path, required: true, schema: { type: string } }
+    get:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Consulta o pedido pelo link. Devolve cancelDeadlineAt.
+      responses:
+        '200':
+          description: Pedido
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicRequest' }
+        '404': { $ref: '#/components/responses/NotFound' }
+    delete:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Cancela pelo link. Prazo checado no servidor.
+      responses:
+        '204': { description: Cancelado }
+        '403': { $ref: '#/components/responses/DeadlinePassed' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /public/requests/{token}/reschedule:
+    post:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Pede remarcação. O horário antigo continua confirmado até o dono aprovar.
+      parameters:
+        - { name: token, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [startAt]
+              properties:
+                startAt: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Pedido de remarcação registrado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/PublicRequest' }
+        '403': { $ref: '#/components/responses/DeadlinePassed' }
+        '409': { $ref: '#/components/responses/SlotUnavailable' }
+  /admin/requests:
+    get:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Pedidos e agenda
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - { name: status, in: query, schema: { $ref: '#/components/schemas/RequestStatus' } }
+      responses:
+        '200':
+          description: Pedidos
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/AdminRequest' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+    post:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Cadastro manual (cliente atendido pelo WhatsApp). Nasce confirmado.
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema: { $ref: '#/components/schemas/CreateRequest' }
+      responses:
+        '201':
+          description: Criado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AdminRequest' }
+        '409': { $ref: '#/components/responses/SlotUnavailable' }
+  /admin/requests/{id}/transition:
+    post:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Muda o estado. Revalida o horário de forma atômica ao confirmar.
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [to]
+              properties:
+                to: { $ref: '#/components/schemas/RequestStatus' }
+                proposedStartAt: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Atualizado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AdminRequest' }
+        '409': { $ref: '#/components/responses/InvalidTransition' }
+  /admin/blocked-numbers:
+    get:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Números bloqueados
+      security: [{ cookieAuth: [] }]
+      responses:
+        '200':
+          description: Lista
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { type: string, description: E.164 }
+    put:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Substitui a lista de números bloqueados
+      security: [{ cookieAuth: [] }]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items: { type: string }
+      responses:
+        '204': { description: Salvo }
+  /admin/clients:
+    get:
+      tags: [E-05 Faltas (v0.1 provisório)]
+      summary: Clientes (por WhatsApp) com histórico de faltas
+      security: [{ cookieAuth: [] }]
+      responses:
+        '200':
+          description: Clientes
+          content:
+            application/json:
+              schema:
+                type: array
+                items: { $ref: '#/components/schemas/Client' }
+components:
+  securitySchemes:
+    cookieAuth: { type: apiKey, in: cookie, name: session }
+  schemas:
+    Error:
+      type: object
+      required: [code, message]
+      properties:
+        code: { $ref: '#/components/schemas/ErrorCode' }
+        message: { type: string }
+        details: { type: object, additionalProperties: true }
+    ErrorCode:
+      type: string
+      enum:
+        - SLOT_UNAVAILABLE
+        - OUTSIDE_BUSINESS_HOURS
+        - VALIDATION_ERROR
+        - DEADLINE_PASSED
+        - UNAUTHORIZED
+        - REQUEST_NOT_ACCEPTED
+        - INVALID_TRANSITION
+        - NOT_FOUND
+        - TOO_MANY_REQUESTS
+    MenuItem:
+      type: object
+      required: [id, name, priceCents, priceType, durationMinutes, visible]
+      properties:
+        id: { type: string }
+        name: { type: string }
+        description: { type: string }
+        priceCents: { type: integer, minimum: 0 }
+        priceType: { type: string, enum: [fixed, from] }
+        durationMinutes: { type: integer, default: 60 }
+        visible: { type: boolean }
+        photoUrl: { type: string, nullable: true }
+    MenuItemInput:
+      type: object
+      required: [name, priceCents, priceType]
+      properties:
+        name: { type: string }
+        description: { type: string }
+        priceCents: { type: integer, minimum: 0 }
+        priceType: { type: string, enum: [fixed, from] }
+        durationMinutes: { type: integer, default: 60 }
+        visible: { type: boolean, default: true }
+        photoUrl: { type: string, nullable: true }
+    Contacts:
+      type: object
+      properties:
+        whatsapp: { type: string, description: E.164 }
+        instagramUrl: { type: string }
+        mapsUrl: { type: string }
+    TimeRange:
+      type: object
+      required: [start, end]
+      properties:
+        start: { type: string, example: '09:00' }
+        end: { type: string, example: '12:00' }
+    HourException:
+      type: object
+      required: [date, ranges]
+      properties:
+        date: { type: string, format: date }
+        ranges:
+          type: array
+          description: Vazio significa fechado no dia.
+          items: { $ref: '#/components/schemas/TimeRange' }
+    Settings:
+      type: object
+      properties:
+        defaultHours:
+          type: array
+          items: { $ref: '#/components/schemas/TimeRange' }
+        hourExceptions:
+          type: array
+          items: { $ref: '#/components/schemas/HourException' }
+        notice: { type: string, nullable: true }
+        cancelDeadlineHours: { type: integer }
+        absenceRule: { type: string }
+    Slot:
+      type: object
+      properties:
+        startAt: { type: string, format: date-time }
+        available: { type: boolean }
+    CreateRequest:
+      type: object
+      required: [clientName, phone, itemId, startAt, consent]
+      properties:
+        clientName: { type: string }
+        phone: { type: string, description: E.164 }
+        itemId: { type: string }
+        startAt: { type: string, format: date-time }
+        consent:
+          type: object
+          required: [accepted, version]
+          properties:
+            accepted: { type: boolean }
+            version: { type: string }
+        honeypot: { type: string, description: Deve vir vazio }
+    RequestStatus:
+      type: string
+      description: |
+        Máquina de estados:
+        pendente -> confirmado | recusado | outro_horario_proposto
+        outro_horario_proposto -> confirmado | cancelado
+        confirmado -> cancelado | faltou
+        recusado, cancelado e faltou são finais. Outra transição devolve 409 INVALID_TRANSITION.
+      enum: [pendente, confirmado, recusado, outro_horario_proposto, cancelado, faltou]
+    PublicRequest:
+      type: object
+      properties:
+        token: { type: string }
+        status: { $ref: '#/components/schemas/RequestStatus' }
+        itemId: { type: string }
+        startAt: { type: string, format: date-time }
+        proposedStartAt: { type: string, format: date-time, nullable: true }
+        rescheduleStartAt: { type: string, format: date-time, nullable: true }
+        cancelDeadlineAt: { type: string, format: date-time }
+    AdminRequest:
+      allOf:
+        - $ref: '#/components/schemas/PublicRequest'
+        - type: object
+          properties:
+            id: { type: string }
+            clientName: { type: string }
+            phone: { type: string }
+            previousAbsences: { type: integer }
+            createdAt: { type: string, format: date-time }
+            consentAcceptedAt: { type: string, format: date-time }
+            consentVersion: { type: string }
+    Client:
+      type: object
+      properties:
+        phone: { type: string }
+        name: { type: string }
+        absences: { type: integer }
+        blocked: { type: boolean }
+  responses:
+    Unauthorized:
+      description: Não autenticado
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: UNAUTHORIZED, message: Credenciais inválidas } } }
+    NotFound:
+      description: Não encontrado
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: NOT_FOUND, message: Não encontrado } } }
+    ValidationError:
+      description: Dados inválidos
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: VALIDATION_ERROR, message: Dados inválidos, details: { field: phone } } } }
+    SlotUnavailable:
+      description: Horário indisponível
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: SLOT_UNAVAILABLE, message: Esse horário não está mais disponível } } }
+    OutsideHours:
+      description: Fora do horário de atendimento
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: OUTSIDE_BUSINESS_HOURS, message: Fora do horário de atendimento } } }
+    DeadlinePassed:
+      description: Prazo vencido
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: DEADLINE_PASSED, message: O prazo para alterar já passou } } }
+    InvalidTransition:
+      description: Transição inválida
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: INVALID_TRANSITION, message: Transição não permitida } } }
+    TooManyRequests:
+      description: Muitas tentativas
+      content: { application/json: { schema: { $ref: '#/components/schemas/Error' }, example: { code: TOO_MANY_REQUESTS, message: Tente novamente mais tarde } } }
