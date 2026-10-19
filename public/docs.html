@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0a0a0a" />
+    <meta name="description" content="Contrato da API da Barbearia Tio Preto (v0)." />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@700;800&family=Barlow:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <title>API Tio Preto — contrato v0</title>
+    <style>
+      :root {
+        --ink: #0a0a0a;
+        --coal: #141414;
+        --line: #2c2a26;
+        --gold: #d4a94f;
+        --sand: #f1e7d0;
+        --mute: #a39d90;
+      }
+      html,
+      body {
+        margin: 0;
+        background: var(--ink);
+        color: var(--sand);
+        font-family: 'Barlow', system-ui, sans-serif;
+      }
+      header.topo {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 0.75rem 1.5rem;
+        border-bottom: 1px solid var(--line);
+        padding: 0.9rem 1.25rem;
+      }
+      .marca {
+        font-family: 'Barlow Condensed', sans-serif;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        color: var(--gold);
+        font-size: 1.25rem;
+        line-height: 1;
+      }
+      .marca small {
+        display: block;
+        font-size: 0.6rem;
+        letter-spacing: 0.3em;
+        color: var(--mute);
+        font-weight: 600;
+        margin-top: 0.25rem;
+      }
+      .links {
+        display: flex;
+        gap: 0.5rem;
+        flex-wrap: wrap;
+      }
+      .links a {
+        border: 1px solid var(--line);
+        border-radius: 0.6rem;
+        color: var(--sand);
+        padding: 0.45rem 0.8rem;
+        font-size: 0.85rem;
+        text-decoration: none;
+      }
+      .links a:hover {
+        border-color: var(--gold);
+        color: var(--gold);
+      }
+      .aviso {
+        margin: 0;
+        padding: 0.7rem 1.25rem;
+        border-bottom: 1px solid var(--line);
+        background: rgba(212, 169, 79, 0.06);
+        color: var(--mute);
+        font-size: 0.85rem;
+      }
+      .aviso b {
+        color: var(--sand);
+      }
+
+      /* Tira a propaganda do renderizador: isto aqui é documento de cliente. */
+      .api-reference-toolbar,
+      .scalar-reference-intro-clients,
+      .explore-scalar-pill,
+      .generate-sdk-button,
+      .agent-button-container,
+      .scalar-card-footer .scalar-api-client__send-request-button,
+      .t-doc__sidebar > div:first-child > button:last-child {
+        display: none !important;
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topo">
+      <div class="marca">Tio Preto <small>API · contrato v0</small></div>
+      <nav class="links">
+        <a href="./">Protótipo</a>
+        <a href="./openapi.yaml" download>Baixar openapi.yaml</a>
+      </nav>
+    </header>
+    <p class="aviso">
+      Contrato da API ainda <b>sem back implementado</b>: o protótipo imita estes endpoints com dados no navegador. As
+      apostas de regra de negócio estão em <b>contrato/questionamentos.md</b>, no repositório.
+    </p>
+
+    <script
+      id="api-reference"
+      data-url="./openapi.yaml"
+      data-configuration='{"theme":"kepler","darkMode":true,"layout":"modern","hideClientButton":true,"hideTestRequestButton":true,"hideDarkModeToggle":true,"documentDownloadType":"yaml","metaData":{"title":"API Tio Preto"}}'
+    ></script>
+    <script src="https://cdn.jsdelivr.net/npm/@scalar/api-reference@1.75.0/dist/browser/standalone.js"></script>
+  </body>
+</html>

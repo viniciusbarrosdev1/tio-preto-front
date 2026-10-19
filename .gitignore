@@ -24,3 +24,6 @@ dist-ssr
 *.sw?
 
 .taste-skill
+
+# gerado por scripts/docs.mjs
+public/openapi.yaml

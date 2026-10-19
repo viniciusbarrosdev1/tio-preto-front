@@ -71,6 +71,23 @@ erro, mesma regra de horário livre e a mesma conta de duração.
 `contrato/questionamentos.md` guarda tudo que o protótipo apostou sem confirmação do cliente —
 é a pauta da reunião com o Tio Preto.
 
+### Documentação navegável da API
+
+A referência bonita sai do próprio YAML, com busca e um bloco por endpoint:
+
+- rodando local: <http://localhost:5173/docs.html>
+- publicado: `<url do protótipo>/docs.html`
+
+`scripts/docs.mjs` copia `contrato/openapi.yaml` para `public/` e roda sozinho no `npm run dev` e
+no `npm run build` — o contrato continua tendo um lugar só. A página é `public/docs.html`
+(renderizada pelo Scalar, via CDN).
+
+Para olhar só no terminal, sem subir o projeto:
+
+```bash
+npx @redocly/cli@2.65.0 preview-docs contrato/openapi.yaml
+```
+
 ## Limites do protótipo
 
 - Os dados vivem só neste navegador. "Resetar" no painel volta ao início.
