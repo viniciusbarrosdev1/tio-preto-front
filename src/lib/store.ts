@@ -2,8 +2,8 @@ import { useSyncExternalStore } from 'react'
 import menuFixture from '@contrato/fixtures/menu.json'
 import requestsFixture from '@contrato/fixtures/requests.json'
 import settingsFixture from '@contrato/fixtures/settings.json'
-import { addDays, toSP, todayKey } from './format'
-import type { BookingRequest, MenuItem, RequestStatus, Settings } from './types'
+import { addDays, fmtTime, toSP, todayKey, weekdayLong } from './format'
+import type { BookingRequest, MenuItem, RequestMessage, RequestStatus, Settings } from './types'
 
 export interface TimeBlock {
   id: string
@@ -20,7 +20,7 @@ export interface State {
   blockedNumbers: string[]
 }
 
-const KEY = 'tio-preto-proto-v1'
+const KEY = 'tio-preto-proto-v2'
 
 export const uid = (prefix: string) =>
   `${prefix}-${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-3)}`
@@ -28,20 +28,36 @@ export const uid = (prefix: string) =>
 export const token = () =>
   Array.from(crypto.getRandomValues(new Uint8Array(18)), (b) => b.toString(16).padStart(2, '0')).join('')
 
+/** Texto que a API do WhatsApp teria mandado nos pedidos de exemplo. */
+const seedMessage = (status: string, itemIds: string[], startAt: string) => {
+  const names = itemIds.map((id) => menuFixture.find((m) => m.id === id)?.name).filter(Boolean).join(' + ')
+  const when = `${weekdayLong(startAt.slice(0, 10))} às ${fmtTime(startAt)}`
+  if (status === 'faltou') return `Falta registrada no horário de ${when}.`
+  return `Horário confirmado: ${names} · ${when}. Até lá!`
+}
+
 function seed(): State {
   const today = todayKey()
-  const requests: BookingRequest[] = requestsFixture.map((r) => ({
-    id: r.id,
-    token: token(),
-    clientName: r.clientName,
-    phone: r.phone,
-    itemId: r.itemId,
-    startAt: toSP(addDays(today, r.dayOffset), r.time),
-    status: r.status as RequestStatus,
-    createdAt: new Date().toISOString(),
-    consentAcceptedAt: new Date().toISOString(),
-    consentVersion: settingsFixture.consentVersion,
-  }))
+  const requests: BookingRequest[] = requestsFixture.map((r) => {
+    const startAt = toSP(addDays(today, r.dayOffset), r.time)
+    const created = new Date(Math.min(Date.now() - 2 * 3600000, new Date(startAt).getTime() - 26 * 3600000)).toISOString()
+    const messages: RequestMessage[] = [{ at: created, text: 'Pedido de horário recebido. Em breve retornamos com a confirmação.' }]
+    if (r.status !== 'pendente')
+      messages.push({ at: created, text: seedMessage(r.status, r.itemIds, startAt) })
+    return {
+      id: r.id,
+      token: token(),
+      clientName: r.clientName,
+      phone: r.phone,
+      itemIds: r.itemIds,
+      startAt,
+      status: r.status as RequestStatus,
+      createdAt: created,
+      consentAcceptedAt: created,
+      consentVersion: settingsFixture.consentVersion,
+      messages,
+    }
+  })
   return {
     menu: menuFixture as MenuItem[],
     settings: settingsFixture as Settings,
@@ -54,7 +70,11 @@ function seed(): State {
 function load(): State {
   try {
     const raw = localStorage.getItem(KEY)
-    if (raw) return JSON.parse(raw) as State
+    if (raw) {
+      const s = JSON.parse(raw) as State
+      // protótipo: se o formato mudou, começa de novo em vez de quebrar a tela
+      if (s?.settings?.horizonWeeks && Array.isArray(s.requests)) return s
+    }
   } catch {
     /* storage indisponível: segue com o seed */
   }

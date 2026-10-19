@@ -1,8 +1,96 @@
 [
-  { "id": "svc-cabelo", "name": "Cabelo", "description": "Corte masculino na tesoura ou máquina.", "priceCents": 5000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
-  { "id": "svc-barba", "name": "Barba", "description": "Barba alinhada na navalha com toalha quente.", "priceCents": 5000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
-  { "id": "svc-sobrancelha-navalha", "name": "Sobrancelha Navalha", "description": "Design de sobrancelha na navalha.", "priceCents": 3000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
-  { "id": "svc-sobrancelha-cera", "name": "Sobrancelha Cera", "description": "Design de sobrancelha com cera.", "priceCents": 4000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
-  { "id": "svc-wold-money", "name": "Cabelo Wold Money", "description": "O corte da casa, com acabamento completo.", "priceCents": 6000, "priceType": "fixed", "durationMinutes": 60, "visible": true },
-  { "id": "svc-visagista", "name": "Corte Visagista", "description": "Corte pensado para o formato do seu rosto. O valor final é combinado no atendimento.", "priceCents": 25000, "priceType": "from", "durationMinutes": 60, "visible": true }
+  {
+    "id": "svc-cabelo",
+    "kind": "servico",
+    "group": "cabelo",
+    "name": "Cabelo",
+    "description": "Corte masculino na tesoura ou máquina.",
+    "priceCents": 5000,
+    "priceType": "fixed",
+    "durationMinutes": 30,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "svc-wold-money",
+    "kind": "servico",
+    "group": "cabelo",
+    "name": "Cabelo Wold Money",
+    "description": "Cabelo grande trabalhado na tesoura.",
+    "priceCents": 6000,
+    "priceType": "fixed",
+    "durationMinutes": 60,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "svc-visagista",
+    "kind": "servico",
+    "group": "cabelo",
+    "name": "Corte Visagista",
+    "description": "Corte pensado para o formato do seu rosto. O valor final é combinado no atendimento.",
+    "priceCents": 25000,
+    "priceType": "from",
+    "durationMinutes": 60,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "svc-barba",
+    "kind": "servico",
+    "group": "barba",
+    "name": "Barba",
+    "description": "Barba alinhada na navalha.",
+    "priceCents": 5000,
+    "priceType": "fixed",
+    "durationMinutes": 30,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "svc-sobrancelha-navalha",
+    "kind": "servico",
+    "group": "sobrancelha",
+    "name": "Sobrancelha Navalha",
+    "description": "Sobrancelha feita na navalha.",
+    "priceCents": 3000,
+    "priceType": "fixed",
+    "durationMinutes": 15,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "svc-sobrancelha-cera",
+    "kind": "servico",
+    "group": "sobrancelha",
+    "name": "Sobrancelha Cera",
+    "description": "Sobrancelha feita na cera.",
+    "priceCents": 4000,
+    "priceType": "fixed",
+    "durationMinutes": 15,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "prod-pomada",
+    "kind": "produto",
+    "name": "Pomada modeladora",
+    "description": "Exemplo de produto. O Tio Preto cadastra os dele no painel.",
+    "priceCents": 3500,
+    "priceType": "fixed",
+    "durationMinutes": 0,
+    "visible": true,
+    "photoUrls": []
+  },
+  {
+    "id": "prod-oleo-barba",
+    "kind": "produto",
+    "name": "Óleo para barba",
+    "description": "Exemplo de produto. O Tio Preto cadastra os dele no painel.",
+    "priceCents": 3000,
+    "priceType": "fixed",
+    "durationMinutes": 0,
+    "visible": true,
+    "photoUrls": []
+  }
 ]

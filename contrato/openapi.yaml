@@ -12,10 +12,29 @@ info:
     - Dinheiro em centavos (priceCents).
     - Erro sempre no formato {code, message, details}.
 
-    Decisões de negócio (apostas a validar com o Tio Preto):
+    Decisões de negócio (apostas a validar com o Tio Preto - ver contrato/questionamentos.md):
     - Pedido pendente NÃO segura o horário. Aprovar um segundo pedido no mesmo horário devolve 409 SLOT_UNAVAILABLE.
-    - Prazo de cancelamento é lido na hora do acesso ao link (cancelDeadlineAt).
+    - Prazo de cancelamento é lido na hora do acesso ao link (cancelDeadlineAt). Dentro do prazo
+      o cliente cancela sozinho; fora dele, o valor do agendamento é cobrado (cobrança fora do sistema).
     - Ao remarcar ou propor outro horário, o horário antigo continua confirmado até o dono aprovar o novo.
+    - Um pedido junta vários serviços (itemIds), no máximo um por grupo: um tipo de cabelo,
+      uma barba, uma sobrancelha.
+    - Duração do atendimento: serviço com durationMinutes menor que slotMinutes (sobrancelha) encaixa
+      junto de outro serviço sem somar tempo e, sozinho, ocupa um horário inteiro. Os demais somam.
+      O total arredonda para cima em slotMinutes e respeita maxServiceMinutes.
+      Ex. (slot 30, teto 60): cabelo+sobrancelha = 30; cabelo+barba+sobrancelha = 60;
+      sobrancelha sozinha = 30; wold money ou visagista, com ou sem barba = 60.
+    - A agenda abre horizonWeeks semanas para frente. É essa variável que o site mostra como
+      "agenda aberta para as próximas N semanas"; não é aviso.
+    - O aviso do dia (notice) vale só para noticeDate e sai do ar sozinho depois da meia-noite.
+    - Mudança de horário padrão ou exceção que deixa horário marcado para fora cancela esses
+      pedidos e marca needsAdjust: o dono resolve cada caso no WhatsApp (remarcar ou excluir).
+    - Produto (kind=produto) aparece no cardápio mas não entra em agendamento.
+    - Quem avisa o cliente é a API do WhatsApp, pelo próprio sistema, a cada mudança de estado
+      (recebido, confirmado, recusado, outro horário proposto, remarcado, cancelado). O dono não
+      precisa mandar mensagem na mão: o contato direto dele é exceção (número errado, cliente
+      bloqueado, horário derrubado por mudança de agenda). Cada mensagem enviada fica registrada
+      em messages, e é isso que o cliente vê na página do pedido.
 servers:
   - url: https://api.tiopretobarbearia.com/v0
 tags:
@@ -42,7 +61,8 @@ paths:
                     type: array
                     items: { $ref: '#/components/schemas/MenuItem' }
                   contacts: { $ref: '#/components/schemas/Contacts' }
-                  notice: { type: string, nullable: true }
+                  notice: { type: string, nullable: true, description: Aviso do dia; some sozinho depois da meia-noite. }
+                  horizonWeeks: { type: integer, description: Semanas de agenda abertas ao cliente. }
   /auth/login:
     post:
       tags: [E-02 Painel do dono]
@@ -144,19 +164,31 @@ paths:
             schema: { $ref: '#/components/schemas/Settings' }
       responses:
         '200':
-          description: Atualizada
+          description: |
+            Atualizada. cancelledRequests traz os pedidos que ficaram fora do novo horário:
+            eles vão para cancelado com needsAdjust e esperam o dono resolver no WhatsApp.
           content:
             application/json:
-              schema: { $ref: '#/components/schemas/Settings' }
+              schema:
+                type: object
+                properties:
+                  settings: { $ref: '#/components/schemas/Settings' }
+                  cancelledRequests:
+                    type: array
+                    items: { $ref: '#/components/schemas/AdminRequest' }
         '400': { $ref: '#/components/responses/ValidationError' }
         '401': { $ref: '#/components/responses/Unauthorized' }
   /public/slots:
     get:
       tags: [E-03 Horário e aviso]
-      summary: Horários livres de um dia. Só "confirmado" e "bloqueado" ocupam.
+      summary: Horários livres de um dia. Só "confirmado", "atendido" e "bloqueado" ocupam.
       parameters:
         - { name: date, in: query, required: true, schema: { type: string, format: date } }
-        - { name: itemId, in: query, required: true, schema: { type: string } }
+        - name: itemIds
+          in: query
+          required: true
+          description: Um ou mais serviços do mesmo pedido. A duração é calculada pelo conjunto.
+          schema: { type: array, items: { type: string } }
       responses:
         '200':
           description: Horários
@@ -166,6 +198,7 @@ paths:
                 type: object
                 properties:
                   date: { type: string, format: date }
+                  durationMinutes: { type: integer, description: Duração total do conjunto de serviços. }
                   slots:
                     type: array
                     items: { $ref: '#/components/schemas/Slot' }
@@ -289,6 +322,40 @@ paths:
             application/json:
               schema: { $ref: '#/components/schemas/AdminRequest' }
         '409': { $ref: '#/components/responses/InvalidTransition' }
+  /admin/requests/{id}/move:
+    post:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Dono muda o horário de um pedido direto na agenda e limpa needsAdjust.
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [startAt]
+              properties:
+                startAt: { type: string, format: date-time }
+      responses:
+        '200':
+          description: Remarcado
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/AdminRequest' }
+        '409': { $ref: '#/components/responses/SlotUnavailable' }
+        '422': { $ref: '#/components/responses/OutsideHours' }
+  /admin/requests/{id}/resolve-adjust:
+    post:
+      tags: [E-04 Agenda (v0.1 provisório)]
+      summary: Tira o pedido da fila de ajustes sem remarcar.
+      security: [{ cookieAuth: [] }]
+      parameters:
+        - { name: id, in: path, required: true, schema: { type: string } }
+      responses:
+        '204': { description: Resolvido }
+        '404': { $ref: '#/components/responses/NotFound' }
   /admin/blocked-numbers:
     get:
       tags: [E-04 Agenda (v0.1 provisório)]
@@ -351,29 +418,49 @@ components:
         - INVALID_TRANSITION
         - NOT_FOUND
         - TOO_MANY_REQUESTS
+    ItemKind:
+      type: string
+      description: servico ocupa horário na agenda; produto é só venda no cardápio.
+      enum: [servico, produto]
+    ServiceGroup:
+      type: string
+      description: |
+        Grupo do serviço. O cliente escolhe no máximo um item por grupo.
+        "outro" não tem limite.
+      enum: [cabelo, barba, sobrancelha, outro]
     MenuItem:
       type: object
-      required: [id, name, priceCents, priceType, durationMinutes, visible]
+      required: [id, kind, name, priceCents, priceType, durationMinutes, visible, photoUrls]
       properties:
         id: { type: string }
+        kind: { $ref: '#/components/schemas/ItemKind' }
+        group: { $ref: '#/components/schemas/ServiceGroup' }
         name: { type: string }
         description: { type: string }
-        priceCents: { type: integer, minimum: 0 }
+        priceCents: { type: integer, minimum: 1 }
         priceType: { type: string, enum: [fixed, from] }
-        durationMinutes: { type: integer, default: 60 }
+        durationMinutes:
+          type: integer
+          default: 30
+          description: 0 em produto. Menor que slotMinutes significa encaixe (sobrancelha).
         visible: { type: boolean }
-        photoUrl: { type: string, nullable: true }
+        photoUrls:
+          type: array
+          description: Galeria do item. O cliente toca na foto para ver a próxima.
+          items: { type: string }
     MenuItemInput:
       type: object
-      required: [name, priceCents, priceType]
+      required: [kind, name, priceCents, priceType]
       properties:
+        kind: { $ref: '#/components/schemas/ItemKind' }
+        group: { $ref: '#/components/schemas/ServiceGroup' }
         name: { type: string }
         description: { type: string }
-        priceCents: { type: integer, minimum: 0 }
+        priceCents: { type: integer, minimum: 1 }
         priceType: { type: string, enum: [fixed, from] }
-        durationMinutes: { type: integer, default: 60 }
+        durationMinutes: { type: integer, default: 30 }
         visible: { type: boolean, default: true }
-        photoUrl: { type: string, nullable: true }
+        photoUrls: { type: array, items: { type: string } }
     Contacts:
       type: object
       properties:
@@ -400,13 +487,24 @@ components:
       properties:
         defaultHours:
           type: array
+          description: Mais de uma faixa no mesmo dia vira pausa (almoço).
           items: { $ref: '#/components/schemas/TimeRange' }
         hourExceptions:
           type: array
           items: { $ref: '#/components/schemas/HourException' }
-        notice: { type: string, nullable: true }
-        cancelDeadlineHours: { type: integer }
-        absenceRule: { type: string }
+        notice: { type: string, nullable: true, description: Aviso do dia. }
+        noticeDate:
+          type: string
+          format: date
+          nullable: true
+          description: Dia em que o aviso vale. Fora dele o aviso não aparece.
+        horizonWeeks: { type: integer, default: 4, description: Semanas de agenda abertas ao cliente. }
+        slotMinutes: { type: integer, default: 30, description: Tamanho do horário na grade. }
+        maxServiceMinutes: { type: integer, default: 60, description: Teto de um atendimento. }
+        cancelDeadlineHours:
+          type: integer
+          description: Aviso mínimo para cancelar ou remarcar. Abaixo disso, cobra-se o agendamento.
+        absenceRule: { type: string, description: 'Texto mostrado ao cliente. {h} vira cancelDeadlineHours.' }
     Slot:
       type: object
       properties:
@@ -414,11 +512,15 @@ components:
         available: { type: boolean }
     CreateRequest:
       type: object
-      required: [clientName, phone, itemId, startAt, consent]
+      required: [clientName, phone, itemIds, startAt, consent]
       properties:
         clientName: { type: string }
         phone: { type: string, description: E.164 }
-        itemId: { type: string }
+        itemIds:
+          type: array
+          minItems: 1
+          description: Só serviços, no máximo um por grupo. 400 VALIDATION_ERROR fora disso.
+          items: { type: string }
         startAt: { type: string, format: date-time }
         consent:
           type: object
@@ -431,17 +533,31 @@ components:
       type: string
       description: |
         Máquina de estados:
-        pendente -> confirmado | recusado | outro_horario_proposto
+        pendente -> confirmado | recusado | outro_horario_proposto | cancelado
         outro_horario_proposto -> confirmado | cancelado
-        confirmado -> cancelado | faltou
-        recusado, cancelado e faltou são finais. Outra transição devolve 409 INVALID_TRANSITION.
-      enum: [pendente, confirmado, recusado, outro_horario_proposto, cancelado, faltou]
+        confirmado -> atendido | cancelado | faltou
+        recusado, cancelado, atendido e faltou são finais. Outra transição devolve 409 INVALID_TRANSITION.
+        atendido e faltou só valem depois da hora marcada; antes disso, 409 INVALID_TRANSITION.
+      enum: [pendente, confirmado, recusado, outro_horario_proposto, cancelado, atendido, faltou]
+    RequestMessage:
+      type: object
+      description: |
+        Mensagem que a API do WhatsApp mandou para o cliente, automaticamente, numa mudança de
+        estado do pedido. Fica de registro no pedido e aparece para o cliente e para o dono.
+      properties:
+        at: { type: string, format: date-time }
+        text: { type: string }
     PublicRequest:
       type: object
       properties:
         token: { type: string }
         status: { $ref: '#/components/schemas/RequestStatus' }
-        itemId: { type: string }
+        itemIds: { type: array, items: { type: string } }
+        durationMinutes: { type: integer }
+        totalPriceCents: { type: integer }
+        messages:
+          type: array
+          items: { $ref: '#/components/schemas/RequestMessage' }
         startAt: { type: string, format: date-time }
         proposedStartAt: { type: string, format: date-time, nullable: true }
         rescheduleStartAt: { type: string, format: date-time, nullable: true }
@@ -455,6 +571,10 @@ components:
             clientName: { type: string }
             phone: { type: string }
             previousAbsences: { type: integer }
+            manual: { type: boolean, description: Cadastrado pelo dono, nasce confirmado. }
+            needsAdjust:
+              type: boolean
+              description: Caiu por mudança de horário feita no painel e espera o dono resolver.
             createdAt: { type: string, format: date-time }
             consentAcceptedAt: { type: string, format: date-time }
             consentVersion: { type: string }
@@ -464,6 +584,7 @@ components:
         phone: { type: string }
         name: { type: string }
         absences: { type: integer }
+        totalRequests: { type: integer }
         blocked: { type: boolean }
   responses:
     Unauthorized:
