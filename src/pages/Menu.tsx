@@ -1,7 +1,7 @@
 import { CalendarClock, Clock, MapPin, Megaphone, MessageCircle } from 'lucide-react'
 import { motion } from 'motion/react'
 import { activeNotice } from '@/lib/api'
-import { Appear, Gallery, LinkBtn, SectionTitle, Wordmark } from '@/components/ui'
+import { Appear, Gallery, LinkBtn, SectionTitle } from '@/components/ui'
 import { durationLabel, moneyShort, waLink } from '@/lib/format'
 import { useAppState } from '@/lib/store'
 import type { MenuItem } from '@/lib/types'
@@ -17,7 +17,7 @@ const Instagram = ({ className }: { className?: string }) => (
 function Row({ item, i }: { item: MenuItem; i: number }) {
   return (
     <Appear i={i} className="flex items-center gap-4 py-4">
-      {item.photoUrls.length > 0 && <Gallery photos={item.photoUrls} alt={item.name} className="h-18 w-18" />}
+      {item.photoUrls.length > 0 && <Gallery photos={item.photoUrls} alt={item.name} className="h-26 w-21" />}
       <div className="min-w-0 flex-1">
         <h3 className="sign text-xl leading-tight text-sand">{item.name}</h3>
         {item.description && <p className="mt-0.5 text-sm leading-snug text-mute">{item.description}</p>}
@@ -46,17 +46,24 @@ export default function Menu() {
 
   return (
     <div className="mx-auto min-h-dvh max-w-md pb-32">
-      <header className="relative overflow-hidden border-b border-line px-5 pb-8 pt-10">
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
-          <Wordmark />
-        </motion.div>
-        <p className="mt-6 max-w-[17rem] text-base text-sand/80">
-          Cabelo, barba e sobrancelha em {settings.city}.
-        </p>
-        <p className="mt-3 flex items-center gap-2 text-sm text-mute">
-          <CalendarClock className="h-4 w-4 text-gold" aria-hidden />
-          Agenda aberta para as próximas {settings.horizonWeeks} semanas
-        </p>
+      <header className="border-b border-line">
+        <motion.img
+          initial={{ opacity: 0, scale: 1.02 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          src="./fotos/logo.png"
+          width={600}
+          height={500}
+          alt="Tio Preto Barbearia"
+          className="block w-full"
+        />
+        <div className="px-5 pb-7 pt-6">
+          <p className="max-w-[19rem] text-base text-sand/85">Cabelo, barba e sobrancelha em {settings.city}.</p>
+          <p className="mt-3 flex items-center gap-2 text-sm text-mute">
+            <CalendarClock className="h-4 w-4 text-gold" aria-hidden />
+            Agenda aberta para as próximas {settings.horizonWeeks} semanas
+          </p>
+        </div>
       </header>
 
       {notice && (

@@ -9,7 +9,11 @@
     "priceType": "fixed",
     "durationMinutes": 30,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/cabelo-1.jpg",
+      "./fotos/cabelo-2.jpg",
+      "./fotos/cabelo-3.jpg"
+    ]
   },
   {
     "id": "svc-wold-money",
@@ -21,7 +25,11 @@
     "priceType": "fixed",
     "durationMinutes": 60,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/wold-money-1.jpg",
+      "./fotos/wold-money-2.jpg",
+      "./fotos/wold-money-3.jpg"
+    ]
   },
   {
     "id": "svc-visagista",
@@ -33,7 +41,10 @@
     "priceType": "from",
     "durationMinutes": 60,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/visagismo-1.jpg",
+      "./fotos/visagismo-2.jpg"
+    ]
   },
   {
     "id": "svc-barba",

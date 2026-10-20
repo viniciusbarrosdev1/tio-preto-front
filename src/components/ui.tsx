@@ -378,11 +378,16 @@ export function Gallery({ photos, alt, className }: { photos: string[]; alt: str
         />
       </AnimatePresence>
       {photos.length > 1 && (
-        <span className="absolute inset-x-0 bottom-1 flex justify-center gap-1">
-          {photos.map((p, j) => (
-            <span key={p} className={cx('h-1 w-1 rounded-full', j === i ? 'bg-gold' : 'bg-sand/40')} />
-          ))}
-        </span>
+        <>
+          <span className="absolute right-1 top-1 rounded bg-ink/75 px-1.5 py-0.5 text-[10px] font-semibold text-sand">
+            {i + 1}/{photos.length}
+          </span>
+          <span className="absolute inset-x-0 bottom-1.5 flex justify-center gap-1">
+            {photos.map((p, j) => (
+              <span key={p} className={cx('h-1.5 w-4 rounded-full', j === i ? 'bg-gold' : 'bg-sand/35')} />
+            ))}
+          </span>
+        </>
       )}
     </button>
   )
