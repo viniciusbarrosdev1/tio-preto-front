@@ -390,7 +390,7 @@ export function Gallery({ photos, alt, className }: { photos: string[]; alt: str
 
 /**
  * Quem avisa o cliente é a API do WhatsApp, sozinha, a cada mudança de estado.
- * O botão de falar é exceção: só quando o Tio Preto precisa resolver na mão.
+ * O botão de falar é exceção: só quando o dono precisa resolver na mão.
  */
 export function WaNotice({
   text,

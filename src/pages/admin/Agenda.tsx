@@ -111,7 +111,7 @@ export default function Agenda() {
   )
 
   const waText = (r: BookingRequest, extra = '') =>
-    `Oi ${r.clientName}, aqui é o Tio Preto. ${extra}Seu horário: ${serviceName(r.itemIds, menu)} · ${fmtDateTime(
+    `Oi ${r.clientName}, aqui é da Barbearia Tio Preto. ${extra}Seu horário: ${serviceName(r.itemIds, menu)} · ${fmtDateTime(
       r.startAt,
     )}. Para cancelar ou remarcar: ${link(r.token)}`
 
@@ -328,12 +328,12 @@ export default function Agenda() {
               <div className="rounded-xl border border-line/70 bg-coal/50 p-2.5 text-xs text-mute">
                 Ao escolher o novo horário, o cliente recebe a mudança no WhatsApp automaticamente.{' '}
                 <a
-                  href={waLink(moving.phone, waText(moving, 'Preciso mudar seu horário. '))}
+                  href={waLink(moving.phone, waText(moving, 'Precisamos mudar seu horário. '))}
                   target="_blank"
                   rel="noreferrer"
                   className="font-semibold text-gold underline underline-offset-2"
                 >
-                  Falar com ele antes
+                  Falar com o cliente antes
                 </a>
                 , se preferir.
               </div>

@@ -154,7 +154,7 @@ export default function Pedidos() {
                     at={lastMessage(r)?.at}
                     href={waLink(
                       r.phone,
-                      `Oi ${r.clientName}, aqui é o Tio Preto. Sobre sua remarcação de ${fmtDateTime(r.startAt)} para ${fmtDateTime(r.rescheduleStartAt!)}: `,
+                      `Oi ${r.clientName}, aqui é da Barbearia Tio Preto. Sobre sua remarcação de ${fmtDateTime(r.startAt)} para ${fmtDateTime(r.rescheduleStartAt!)}: `,
                     )}
                     cta="Falar no WhatsApp (se precisar)"
                   />
@@ -181,7 +181,7 @@ export default function Pedidos() {
                     at={lastMessage(r)?.at}
                     href={waLink(
                       r.phone,
-                      `Oi ${r.clientName}, aqui é o Tio Preto. Não consigo ${fmtDateTime(r.startAt)}. Posso te atender ${fmtDateTime(
+                      `Oi ${r.clientName}, aqui é da Barbearia Tio Preto. Não vamos conseguir atender ${fmtDateTime(r.startAt)}. Podemos te atender ${fmtDateTime(
                         r.proposedStartAt!,
                       )}? Confirme aqui: ${link(r)}`,
                     )}

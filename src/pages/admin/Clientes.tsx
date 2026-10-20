@@ -55,7 +55,7 @@ export default function Clientes() {
     : []
 
   const adjustText = (r: BookingRequest) =>
-    `Oi ${r.clientName}, aqui é o Tio Preto. Precisei mexer na agenda do dia ${fmtDateTime(r.startAt)} e seu horário de ${serviceName(
+    `Oi ${r.clientName}, aqui é da Barbearia Tio Preto. Precisamos mexer na agenda do dia ${fmtDateTime(r.startAt)} e seu horário de ${serviceName(
       r.itemIds,
       menu,
     )} foi cancelado. Vamos ajustar: que horário fica bom para você?`
@@ -149,7 +149,7 @@ export default function Clientes() {
                       <Eye className="h-4 w-4" aria-hidden /> Ver
                     </Btn>
                     <LinkBtn
-                      href={waLink(c.phone, `Oi ${c.name}, aqui é o Tio Preto. `)}
+                      href={waLink(c.phone, `Oi ${c.name}, aqui é da Barbearia Tio Preto. `)}
                       target="_blank"
                       rel="noreferrer"
                       className="!min-h-10 !px-3.5 !text-base"
@@ -226,7 +226,7 @@ export default function Clientes() {
 
             <LinkBtn
               variant="gold"
-              href={waLink(client.phone, `Oi ${client.name}, aqui é o Tio Preto. `)}
+              href={waLink(client.phone, `Oi ${client.name}, aqui é da Barbearia Tio Preto. `)}
               target="_blank"
               rel="noreferrer"
               className="w-full"

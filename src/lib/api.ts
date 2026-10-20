@@ -240,7 +240,7 @@ export const api = {
       throw new ApiError(
         'REQUEST_NOT_ACCEPTED',
         422,
-        'Não conseguimos registrar seu pedido por aqui. Fale direto com o Tio Preto no WhatsApp.',
+        'Não conseguimos registrar seu pedido por aqui. Fale com a gente no WhatsApp.',
       )
     const itemIds = services.map((m) => m.id)
     const dur = durationFor(itemIds, s)
@@ -285,7 +285,7 @@ export const api = {
     if (!canTransition(r.status, 'cancelado'))
       throw new ApiError('INVALID_TRANSITION', 409, 'Esse pedido não pode mais ser cancelado.')
     if (r.status === 'confirmado' && Date.now() > new Date(cancelDeadlineAt(r)).getTime())
-      throw new ApiError('DEADLINE_PASSED', 403, 'O prazo para cancelar já passou. Fale com o Tio Preto.')
+      throw new ApiError('DEADLINE_PASSED', 403, 'O prazo para cancelar já passou. Fale com a gente no WhatsApp.')
     patch(r.id, { status: 'cancelado', rescheduleStartAt: null })
     pushMessage(r.id, `Pedido cancelado pelo cliente (${whenText(r.startAt)}).`)
     return wait(true)
@@ -297,7 +297,7 @@ export const api = {
     if (r.status !== 'confirmado')
       throw new ApiError('INVALID_TRANSITION', 409, 'Só dá para remarcar um horário confirmado.')
     if (Date.now() > new Date(cancelDeadlineAt(r)).getTime())
-      throw new ApiError('DEADLINE_PASSED', 403, 'O prazo para remarcar já passou. Fale com o Tio Preto.')
+      throw new ApiError('DEADLINE_PASSED', 403, 'O prazo para remarcar já passou. Fale com a gente no WhatsApp.')
     const dur = durationFor(r.itemIds)
     if (!withinHours(startAt, dur))
       throw new ApiError('OUTSIDE_BUSINESS_HOURS', 422, 'Esse horário está fora do atendimento.')
@@ -414,13 +414,13 @@ export const api = {
     if (to === 'outro_horario_proposto') {
       if (!proposedStartAt) throw new ApiError('VALIDATION_ERROR', 400, 'Escolha o novo horário.')
       patch(id, { status: to, proposedStartAt })
-      pushMessage(id, `O Tio Preto sugeriu ${whenText(proposedStartAt)} no lugar de ${whenText(r.startAt)}.`)
+      pushMessage(id, `Sugerimos ${whenText(proposedStartAt)} no lugar de ${whenText(r.startAt)}.`)
       return
     }
     patch(id, { status: to, rescheduleStartAt: null })
     if (to === 'recusado')
       pushMessage(id, `Não vai dar para atender ${whenText(r.startAt)}. Pode pedir outro horário pelo site.`)
-    if (to === 'cancelado') pushMessage(id, `Horário de ${whenText(r.startAt)} cancelado pelo Tio Preto.`)
+    if (to === 'cancelado') pushMessage(id, `Precisamos cancelar seu horário de ${whenText(r.startAt)}. Pode pedir outro pelo site.`)
     if (to === 'faltou') pushMessage(id, `Falta registrada no horário de ${whenText(r.startAt)}.`)
   },
 
@@ -434,7 +434,7 @@ export const api = {
     if (!isFree(startAt, dur, r.id))
       throw new ApiError('SLOT_UNAVAILABLE', 409, 'Esse horário já está ocupado.')
     patch(id, { startAt, status: 'confirmado', needsAdjust: false, rescheduleStartAt: null, proposedStartAt: null })
-    pushMessage(id, `Horário remarcado pelo Tio Preto: ${whenText(startAt)}.`)
+    pushMessage(id, `Remarcamos seu horário: ${whenText(startAt)}.`)
   },
 
   /** Tira o pedido da fila de ajustes sem remarcar. */

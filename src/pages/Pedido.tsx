@@ -9,10 +9,10 @@ import { useAppState } from '@/lib/store'
 import { ApiError, type BookingRequest, type Slot } from '@/lib/types'
 
 const statusInfo: Record<BookingRequest['status'], { label: string; tone: 'mute' | 'gold' | 'ok' | 'danger'; text: string }> = {
-  pendente: { label: 'Aguardando', tone: 'gold', text: 'O Tio Preto vai olhar seu pedido e responder pelo WhatsApp.' },
+  pendente: { label: 'Aguardando', tone: 'gold', text: 'Vamos olhar seu pedido e responder pelo WhatsApp.' },
   confirmado: { label: 'Confirmado', tone: 'ok', text: 'Horário confirmado. Até lá!' },
   recusado: { label: 'Recusado', tone: 'danger', text: 'Esse horário não deu. Você pode pedir outro.' },
-  outro_horario_proposto: { label: 'Novo horário sugerido', tone: 'gold', text: 'O Tio Preto sugeriu outro horário para você.' },
+  outro_horario_proposto: { label: 'Novo horário sugerido', tone: 'gold', text: 'Sugerimos outro horário para você.' },
   cancelado: { label: 'Cancelado', tone: 'mute', text: 'Pedido cancelado.' },
   atendido: { label: 'Atendido', tone: 'ok', text: 'Atendimento concluído. Valeu pela visita!' },
   faltou: { label: 'Falta registrada', tone: 'danger', text: 'Falta registrada neste atendimento.' },
@@ -92,7 +92,7 @@ export default function Pedido() {
             </motion.span>
             <div className="text-sm">
               <p className="font-display text-lg font-bold uppercase leading-none text-gold">Pedido enviado</p>
-              <p className="mt-1 text-sand/90">Já saiu uma mensagem no seu WhatsApp. Agora é esperar a confirmação.</p>
+              <p className="mt-1 text-sand/90">Já saiu uma mensagem no seu WhatsApp.</p>
             </div>
           </motion.div>
         )}
@@ -118,7 +118,7 @@ export default function Pedido() {
         <p className="text-sm text-sand/90">{info.text}</p>
         {r.rescheduleStartAt && (
           <p className="rounded-xl border border-gold/40 bg-gold/5 p-3 text-sm">
-            Você pediu para mudar para <b>{fmtDateTime(r.rescheduleStartAt)}</b>. Seu horário atual segue valendo até o Tio Preto aprovar.
+            Você pediu para mudar para <b>{fmtDateTime(r.rescheduleStartAt)}</b>. Seu horário atual segue valendo até confirmarmos a mudança.
           </p>
         )}
       </Card>
@@ -141,7 +141,7 @@ export default function Pedido() {
 
       <section className="mt-6">
         <SectionTitle>Mensagens no seu WhatsApp</SectionTitle>
-        <p className="mb-3 text-sm text-mute">Enviadas na hora, sozinhas, a cada passo do seu pedido.</p>
+        <p className="mb-3 text-sm text-mute">Enviadas automaticamente a cada passo do pedido. No protótipo, ficam só aqui.</p>
         <div className="space-y-2">
           {r.messages.map((m, i) => (
             <Appear key={`${m.at}-${i}`} i={i} className="rounded-xl border border-line bg-coal/40 p-3">
@@ -150,7 +150,6 @@ export default function Pedido() {
             </Appear>
           ))}
         </div>
-        <p className="mt-2 text-xs text-mute">No protótipo elas ficam só aqui, de registro.</p>
       </section>
 
       <Card className="mt-6 space-y-3 border-gold/25">
@@ -173,9 +172,9 @@ export default function Pedido() {
               rel="noreferrer"
               className="font-semibold text-gold underline underline-offset-2"
             >
-              fale com o Tio Preto no WhatsApp
+              fale com a gente no WhatsApp
             </a>{' '}
-            que ele resolve.
+            que resolvemos para você.
           </span>
         </p>
       </Card>
@@ -185,7 +184,7 @@ export default function Pedido() {
           {r.status === 'confirmado' && (
             <p className="text-sm text-mute">
               Cancelar ou remarcar até {fmtDateTime(deadline)} ({settings.cancelDeadlineHours}h antes).
-              {pastDeadline && ' O prazo já passou: fale direto com o Tio Preto.'}
+              {pastDeadline && ' O prazo já passou: fale com a gente no WhatsApp.'}
             </p>
           )}
           <div className="flex flex-wrap gap-2">
@@ -212,7 +211,6 @@ export default function Pedido() {
                 className="overflow-hidden"
               >
                 <div className="space-y-3 border-t border-line pt-3">
-                  <p className="text-sm text-mute">Escolha o novo dia e horário:</p>
                   <div className="strip">
                     {openDates(settings).map((d) => (
                       <motion.button

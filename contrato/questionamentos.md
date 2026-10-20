@@ -112,3 +112,12 @@ Lá ele avisa no WhatsApp (mensagem pronta), reagenda ou marca como resolvido.
 - [ ] Fila de espera quando o dia lota.
 - [ ] Cliente escolher barbeiro (hoje o sistema assume só ele atendendo).
 - [ ] Lembrete automático na véspera do horário.
+
+## 11. Tom de voz dos textos
+
+- [ ] **O site fala como a barbearia, em "nós"** — "vamos olhar seu pedido", "confirmamos seu
+      pedido", "fale com a gente no WhatsApp". Saiu o "o Tio Preto" em terceira pessoa, que
+      soava como se outra pessoa tivesse escrito o site. Confirmar se ele gosta desse tom ou se
+      prefere falar na primeira pessoa dele ("eu confirmo", "me chama no WhatsApp").
+- [ ] **Mensagens prontas do painel começam com "aqui é da Barbearia Tio Preto"**. Se ele
+      preferir "aqui é o Tio Preto", muda só o texto.

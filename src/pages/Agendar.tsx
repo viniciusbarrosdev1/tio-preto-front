@@ -122,7 +122,7 @@ export default function Agendar() {
             target="_blank"
             rel="noreferrer"
           >
-            <MessageCircle className="h-5 w-5" aria-hidden /> Falar com o Tio Preto
+            <MessageCircle className="h-5 w-5" aria-hidden /> Falar com a gente no WhatsApp
           </LinkBtn>
           <Link to="/" className="block text-center text-sm text-mute underline-offset-2 hover:text-gold hover:underline">
             Voltar para o início
@@ -135,9 +135,8 @@ export default function Agendar() {
     <Shell>
       <form onSubmit={submit} className="space-y-9 pb-4" noValidate>
         <section>
-          <SectionTitle>1. O que você vai fazer</SectionTitle>
-          <p className="mb-4 text-sm text-mute">Dá para juntar cabelo, barba e sobrancelha. De cada tipo, só um.</p>
-          <div className="space-y-5">
+          <SectionTitle>1. Serviços</SectionTitle>
+          <div className="mt-4 space-y-5">
             {groups.map(({ group, items }) => (
               <div key={group}>
                 <p className="mb-2 flex items-baseline justify-between gap-2">
@@ -235,9 +234,7 @@ export default function Agendar() {
         </section>
 
         <section className="rounded-2xl border border-line bg-coal/30 p-4">
-          <SectionTitle right={<span className="text-xs text-mute">{duration ? durationLabel(duration) : ''}</span>}>
-            3. Horário
-          </SectionTitle>
+          <SectionTitle>3. Horário</SectionTitle>
           <p className="mb-3 text-sm first-letter:uppercase text-sand/80">
             {date ? `${weekdayName(date)}, ${dayMonth(date)}` : 'Escolha o dia acima'}
           </p>
@@ -275,15 +272,7 @@ export default function Agendar() {
                   )
                 })}
               </div>
-              <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-mute">
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm border border-line bg-coal" /> livre
-                </span>
-                <span className="inline-flex items-center gap-1.5">
-                  <span className="h-2.5 w-2.5 rounded-sm border border-line/60 bg-coal/20" /> ocupado
-                </span>
-                {slots.every((s) => !s.available) && <span>Tudo ocupado nesse dia.</span>}
-              </div>
+              {slots.every((s) => !s.available) && <p className="mt-3 text-xs text-mute">Tudo ocupado nesse dia.</p>}
             </>
           )}
           {errors.slot && <p role="alert" className="mt-2 text-sm text-danger">{errors.slot}</p>}
@@ -294,7 +283,7 @@ export default function Agendar() {
           <Field label="Nome" error={errors.name}>
             <Input value={name} onChange={(e) => setName(e.target.value)} autoComplete="name" placeholder="Seu nome" />
           </Field>
-          <Field label="WhatsApp" error={errors.phone} hint="Com DDD. Com o número é que o Tio Preto confirma seu pedido.">
+          <Field label="WhatsApp" error={errors.phone} hint="Com DDD. Com o número é que confirmamos seu pedido.">
             <PhoneInput value={phone} onValue={setPhone} />
           </Field>
           <div aria-hidden className="absolute -left-[9999px]">
@@ -303,9 +292,6 @@ export default function Agendar() {
           <Card className="space-y-1 text-sm text-sand/90">
             <p className="font-display font-bold uppercase tracking-wide text-gold">Regra de falta</p>
             <p>{absenceRuleText(settings)}</p>
-            <p className="text-mute">
-              Prazo para avisar: {settings.cancelDeadlineHours}h antes do horário.
-            </p>
           </Card>
           <div>
             <label className="flex cursor-pointer items-start gap-3 text-sm">
@@ -341,7 +327,7 @@ export default function Agendar() {
           <Btn type="submit" loading={busy} className="w-full">
             <Check className="h-5 w-5" aria-hidden /> Enviar pedido
           </Btn>
-          <p className="mt-2 text-center text-xs text-mute">O horário só é seu depois que o Tio Preto confirmar.</p>
+          <p className="mt-2 text-center text-xs text-mute">O horário só é seu depois da nossa confirmação.</p>
         </div>
       </form>
     </Shell>
@@ -354,8 +340,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <Link to="/" className="mb-5 inline-flex items-center gap-2 text-sm text-mute hover:text-gold">
         <ArrowLeft className="h-4 w-4" aria-hidden /> Cardápio
       </Link>
-      <h1 className="mb-1 font-display text-4xl font-extrabold uppercase text-sand">Agendar horário</h1>
-      <p className="mb-7 text-sm text-mute">Em 4 passos. Leva menos de um minuto.</p>
+      <h1 className="mb-7 font-display text-4xl font-extrabold uppercase text-sand">Agendar horário</h1>
       {children}
     </div>
   )

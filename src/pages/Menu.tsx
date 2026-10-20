@@ -60,7 +60,7 @@ export default function Menu() {
           <Wordmark />
         </motion.div>
         <p className="mt-6 max-w-[17rem] text-base text-sand/80">
-          Cabelo, barba e sobrancelha em {settings.city}. Veja os valores e agende seu horário.
+          Cabelo, barba e sobrancelha em {settings.city}.
         </p>
         <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-coal/70 px-3 py-1.5 text-xs text-mute">
           <CalendarClock className="h-3.5 w-3.5 text-gold" aria-hidden />
@@ -102,7 +102,6 @@ export default function Menu() {
                 <Row key={it.id} item={it} i={i} />
               ))}
             </div>
-            <p className="mt-3 text-xs text-mute">Produto é venda na hora, não ocupa horário na agenda.</p>
           </div>
         )}
 
