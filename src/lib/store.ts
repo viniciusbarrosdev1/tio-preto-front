@@ -20,7 +20,7 @@ export interface State {
   blockedNumbers: string[]
 }
 
-const KEY = 'tio-preto-proto-v3'
+const KEY = 'tio-preto-proto-v4'
 
 export const uid = (prefix: string) =>
   `${prefix}-${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-3)}`
@@ -38,9 +38,12 @@ const seedMessage = (status: string, itemIds: string[], startAt: string) => {
 
 function seed(): State {
   const today = todayKey()
-  const requests: BookingRequest[] = requestsFixture.map((r) => {
+  const requests: BookingRequest[] = requestsFixture.map((r, i) => {
     const startAt = toSP(addDays(today, r.dayOffset), r.time)
-    const created = new Date(Math.min(Date.now() - 2 * 3600000, new Date(startAt).getTime() - 26 * 3600000)).toISOString()
+    // cada pedido de exemplo chegou numa hora diferente, sempre antes do horário marcado
+    const created = new Date(
+      Math.min(Date.now() - (2 + i * 9) * 3600000, new Date(startAt).getTime() - (26 + i * 3) * 3600000),
+    ).toISOString()
     const messages: RequestMessage[] = [{ at: created, text: 'Pedido de horário recebido. Em breve retornamos com a confirmação.' }]
     if (r.status !== 'pendente')
       messages.push({ at: created, text: seedMessage(r.status, r.itemIds, startAt) })
