@@ -91,7 +91,7 @@ export default function Pedido() {
               <Check className="h-5 w-5" aria-hidden />
             </motion.span>
             <div className="text-sm">
-              <p className="font-display text-lg font-bold uppercase leading-none text-gold">Pedido enviado</p>
+              <p className="sign text-base leading-none text-gold">Pedido enviado</p>
               <p className="mt-1 text-sand/90">Já saiu uma mensagem no seu WhatsApp.</p>
             </div>
           </motion.div>
@@ -100,10 +100,10 @@ export default function Pedido() {
 
       <Card className="space-y-3">
         <div className="flex items-start justify-between gap-3">
-          <span className="font-display text-2xl font-bold uppercase leading-tight">{names}</span>
+          <span className="sign text-xl leading-tight">{names}</span>
           <Badge tone={info.tone}>{info.label}</Badge>
         </div>
-        <p className="font-display text-3xl font-extrabold leading-tight text-gold first-letter:uppercase">
+        <p className="sign text-2xl leading-tight text-gold first-letter:uppercase">
           {weekdayName(dateKey(r.startAt))}, {dayMonth(dateKey(r.startAt))} às {fmtTime(r.startAt)}
         </p>
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-mute">
@@ -232,7 +232,7 @@ function Wrap({ children }: { children: React.ReactNode }) {
       <Link to="/" className="no-print mb-5 inline-flex items-center gap-2 text-sm text-mute hover:text-gold">
         <ArrowLeft className="h-4 w-4" aria-hidden /> Cardápio
       </Link>
-      <h1 className="mb-6 font-display text-4xl font-extrabold uppercase">Seu pedido</h1>
+      <h1 className="mb-6 sign text-4xl">Seu pedido</h1>
       {children}
     </div>
   )

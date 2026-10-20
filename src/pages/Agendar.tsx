@@ -108,7 +108,7 @@ export default function Agendar() {
     return (
       <Shell>
         <Card className="space-y-4">
-          <p className="flex items-center gap-2 font-display text-xl font-bold uppercase text-gold">
+          <p className="flex items-center gap-2 sign text-lg text-gold">
             <AlertTriangle className="h-5 w-5" aria-hidden /> Vamos resolver no WhatsApp
           </p>
           <p className="text-sm">{blocked}</p>
@@ -140,7 +140,7 @@ export default function Agendar() {
             {groups.map(({ group, items }) => (
               <div key={group}>
                 <p className="mb-2 flex items-baseline justify-between gap-2">
-                  <span className="font-display text-lg font-bold uppercase tracking-wide text-sand">{GROUP_LABEL[group]}</span>
+                  <span className="sign text-base tracking-wide text-sand">{GROUP_LABEL[group]}</span>
                   <span className="text-xs text-mute">{group === 'outro' ? 'o que quiser' : items.length > 1 ? 'escolha um' : 'opcional'}</span>
                 </p>
                 <div className="space-y-2">
@@ -172,12 +172,12 @@ export default function Agendar() {
                           <Check className="h-4 w-4" />
                         </span>
                         <span className="min-w-0 flex-1">
-                          <span className="block font-display text-xl font-bold uppercase leading-tight">{i.name}</span>
+                          <span className="block sign text-lg leading-tight">{i.name}</span>
                           <span className="block text-xs text-mute">{durationLabel(i.durationMinutes)}</span>
                         </span>
-                        <span className="shrink-0 text-right text-sm font-semibold text-gold">
-                          {i.priceType === 'from' && <span className="block text-[10px] uppercase text-gold-dim">a partir de</span>}
-                          {moneyShort(i.priceCents)}
+                        <span className="figures shrink-0 text-right text-gold">
+                          {i.priceType === 'from' && <span className="block text-[11px] text-gold-dim">a partir de</span>}
+                          <span className="sign text-lg leading-none">{moneyShort(i.priceCents)}</span>
                         </span>
                       </motion.label>
                     )
@@ -290,7 +290,7 @@ export default function Agendar() {
             <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} name="site" />
           </div>
           <Card className="space-y-1 text-sm text-sand/90">
-            <p className="font-display font-bold uppercase tracking-wide text-gold">Regra de falta</p>
+            <p className="sign text-lg leading-none text-gold">Regra de falta</p>
             <p>{absenceRuleText(settings)}</p>
           </Card>
           <div>
@@ -317,7 +317,7 @@ export default function Agendar() {
                     {itemIds.map((id) => servicos.find((s) => s.id === id)?.name).filter(Boolean).join(' + ')}
                   </span>
                 </span>
-                <span className="shrink-0 font-display text-xl font-bold text-gold">
+                <span className="shrink-0 sign text-lg text-gold">
                   {total.from ? 'a partir de ' : ''}
                   {moneyShort(total.cents)}
                 </span>
@@ -340,7 +340,7 @@ function Shell({ children }: { children: React.ReactNode }) {
       <Link to="/" className="mb-5 inline-flex items-center gap-2 text-sm text-mute hover:text-gold">
         <ArrowLeft className="h-4 w-4" aria-hidden /> Cardápio
       </Link>
-      <h1 className="mb-7 font-display text-4xl font-extrabold uppercase text-sand">Agendar horário</h1>
+      <h1 className="mb-7 sign text-4xl text-sand">Agendar horário</h1>
       {children}
     </div>
   )

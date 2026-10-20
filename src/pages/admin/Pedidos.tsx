@@ -38,12 +38,12 @@ export default function Pedidos() {
       <>
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
-            <p className="font-display text-xl font-bold uppercase leading-tight">{r.clientName}</p>
+            <p className="sign text-lg leading-tight">{r.clientName}</p>
             <p className="truncate text-sm text-mute">{prettyPhone(r.phone)}</p>
           </div>
           <Badge tone={r.status === 'pendente' ? 'gold' : 'mute'}>{serviceName(r.itemIds, menu)}</Badge>
         </div>
-        <p className="font-display text-2xl font-bold leading-tight text-gold first-letter:uppercase">
+        <p className="sign text-xl leading-tight text-gold first-letter:uppercase">
           {weekdayName(r.startAt.slice(0, 10))}, {dayMonth(r.startAt.slice(0, 10))} às {fmtTime(r.startAt)}
         </p>
         <p className="flex flex-wrap items-center gap-x-3 text-sm text-mute">
@@ -64,7 +64,7 @@ export default function Pedidos() {
     <div className="space-y-9">
       <section>
         <div className="mb-4 flex items-baseline justify-between gap-3">
-          <h1 className="font-display text-3xl font-extrabold uppercase">Pedidos novos</h1>
+          <h1 className="sign text-3xl">Pedidos novos</h1>
           {pending.length > 0 && <Badge tone="gold">{pending.length} esperando</Badge>}
         </div>
         {pending.length === 0 ? (
@@ -129,7 +129,7 @@ export default function Pedidos() {
             {resched.map((r, i) => (
               <Appear key={r.id} i={i}>
                 <Card className="space-y-3">
-                  <p className="font-display text-xl font-bold uppercase">{r.clientName}</p>
+                  <p className="sign text-lg">{r.clientName}</p>
                   <p className="text-sm text-mute">
                     De {fmtDateTime(r.startAt)} para <b className="text-gold">{fmtDateTime(r.rescheduleStartAt!)}</b>. O horário atual
                     continua valendo até você aprovar.
@@ -172,7 +172,7 @@ export default function Pedidos() {
             {proposed.map((r, i) => (
               <Appear key={r.id} i={i}>
                 <Card className="space-y-3">
-                  <p className="font-display text-xl font-bold uppercase">{r.clientName}</p>
+                  <p className="sign text-lg">{r.clientName}</p>
                   <p className="text-sm text-mute">
                     Você sugeriu <b className="text-gold">{fmtDateTime(r.proposedStartAt!)}</b> no lugar de {fmtDateTime(r.startAt)}.
                   </p>

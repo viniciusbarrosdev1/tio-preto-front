@@ -29,7 +29,7 @@ export default function AdminLayout() {
       <header className="flex items-center justify-between gap-3 border-b border-line px-5 py-4">
         <div>
           <Wordmark small />
-          <p className="mt-1 text-[11px] uppercase tracking-[0.2em] text-mute">Painel do dono</p>
+          <p className="mt-1 text-xs text-mute">Painel do dono</p>
         </div>
         <div className="flex items-center gap-1 text-sm text-mute">
           <a href="#/" className="inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2.5 hover:bg-coal hover:text-gold" title="Ver o site do cliente">

@@ -65,7 +65,7 @@ export default function Horarios() {
 
   return (
     <div className="space-y-9">
-      <h1 className="font-display text-3xl font-extrabold uppercase">Horários e avisos</h1>
+      <h1 className="sign text-3xl">Horários e avisos</h1>
 
       {adjustCount > 0 && (
         <Card className="flex items-start gap-3 border-danger/40 bg-danger/5">
@@ -136,7 +136,7 @@ export default function Horarios() {
         </Btn>
         {lastHints.length > 0 && (
           <Card className="text-sm text-mute">
-            <p className="font-display font-bold uppercase tracking-wide text-gold">Até que hora o cliente consegue marcar</p>
+            <p className="sign text-lg leading-none text-gold">Até que hora o cliente consegue marcar</p>
             <ul className="mt-1 space-y-0.5">
               {lastHints.map((x) => (
                 <li key={x.m}>

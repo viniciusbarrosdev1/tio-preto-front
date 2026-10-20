@@ -19,7 +19,7 @@ export default function Login() {
     <div className="mx-auto flex min-h-dvh max-w-sm flex-col justify-center px-5">
       <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.35 }}>
         <Wordmark />
-        <p className="mt-2 text-sm uppercase tracking-[0.25em] text-mute">Painel do dono</p>
+        <p className="mt-2 text-sm text-mute">Painel do dono</p>
       </motion.div>
       <form
         className="mt-10 space-y-4"

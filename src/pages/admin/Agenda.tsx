@@ -118,7 +118,7 @@ export default function Agenda() {
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-extrabold uppercase">Agenda</h1>
+        <h1 className="sign text-3xl">Agenda</h1>
         <Btn size="sm" onClick={() => setManual(true)}>
           <Plus className="h-4 w-4" aria-hidden /> Cadastrar
         </Btn>
@@ -172,7 +172,7 @@ export default function Agenda() {
           </div>
 
           <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <p className="font-display text-xl font-bold uppercase first-letter:uppercase">{weekdayLong(date)}</p>
+            <p className="sign text-lg first-letter:uppercase">{weekdayLong(date)}</p>
             <p className="text-sm text-mute">
               {hasHours ? hoursFor(date, settings).map((r) => `${r.start}–${r.end}`).join(' · ') : 'Fechado'}
             </p>
@@ -189,7 +189,7 @@ export default function Agenda() {
                   <Card className="space-y-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="font-display text-xl font-bold uppercase leading-tight">
+                        <p className="sign text-lg leading-tight">
                           {fmtTime(r.startAt)}–{fmtTime(endOf(r))} · {r.clientName}
                         </p>
                         <p className="truncate text-sm text-mute">
@@ -299,7 +299,7 @@ export default function Agenda() {
             <Appear key={r.id} i={i}>
               <Card className="flex items-start justify-between gap-3">
                 <div className="min-w-0">
-                  <p className="font-display text-lg font-bold uppercase leading-tight">
+                  <p className="sign text-base leading-tight">
                     {dayMonth(dateKey(r.startAt))} {fmtTime(r.startAt)} · {r.clientName}
                   </p>
                   <p className="truncate text-sm text-mute">

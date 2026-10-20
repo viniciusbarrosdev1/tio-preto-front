@@ -71,7 +71,7 @@ export default function Clientes() {
 
   return (
     <div className="space-y-8">
-      <h1 className="font-display text-3xl font-extrabold uppercase">Clientes</h1>
+      <h1 className="sign text-3xl">Clientes</h1>
 
       {adjust.length > 0 && (
         <section>
@@ -86,7 +86,7 @@ export default function Clientes() {
                     WhatsApp; este caso é exceção e você ajusta no particular.
                   </p>
                   <div>
-                    <p className="font-display text-xl font-bold uppercase leading-tight">{r.clientName}</p>
+                    <p className="sign text-lg leading-tight">{r.clientName}</p>
                     <p className="text-sm text-mute">
                       {prettyPhone(r.phone)} · {serviceName(r.itemIds, menu)}
                     </p>
@@ -130,7 +130,7 @@ export default function Clientes() {
                 <Card className={cx('space-y-3', blocked && 'border-danger/40')}>
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
-                      <p className="font-display text-xl font-bold uppercase leading-tight">{c.name}</p>
+                      <p className="sign text-lg leading-tight">{c.name}</p>
                       <p className="truncate text-sm text-mute">
                         {prettyPhone(c.phone)} · {c.total} pedido{c.total > 1 ? 's' : ''}
                       </p>
@@ -199,7 +199,7 @@ export default function Clientes() {
                   <div key={r.id} className="rounded-xl border border-line bg-coal/40 p-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="font-display text-lg font-bold uppercase leading-tight text-gold">{fmtDateTime(r.startAt)}</p>
+                        <p className="sign text-base leading-tight text-gold">{fmtDateTime(r.startAt)}</p>
                         <p className="text-sm text-sand/90">{serviceName(r.itemIds, menu)}</p>
                         <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-mute">
                           <span className="inline-flex items-center gap-1">

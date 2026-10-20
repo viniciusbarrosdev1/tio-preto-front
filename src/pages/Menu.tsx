@@ -1,4 +1,4 @@
-import { CalendarClock, Clock, MapPin, Megaphone, MessageCircle, Scissors, ShoppingBag } from 'lucide-react'
+import { CalendarClock, Clock, MapPin, Megaphone, MessageCircle } from 'lucide-react'
 import { motion } from 'motion/react'
 import { activeNotice } from '@/lib/api'
 import { Appear, Gallery, LinkBtn, SectionTitle, Wordmark } from '@/components/ui'
@@ -15,18 +15,11 @@ const Instagram = ({ className }: { className?: string }) => (
 )
 
 function Row({ item, i }: { item: MenuItem; i: number }) {
-  const Icon = item.kind === 'produto' ? ShoppingBag : Scissors
   return (
     <Appear i={i} className="flex items-center gap-4 py-4">
-      {item.photoUrls.length > 0 ? (
-        <Gallery photos={item.photoUrls} alt={item.name} className="h-18 w-18" />
-      ) : (
-        <div aria-hidden className="flex h-18 w-18 shrink-0 items-center justify-center rounded-xl border border-line bg-coal text-gold/40">
-          <Icon className="h-6 w-6" />
-        </div>
-      )}
+      {item.photoUrls.length > 0 && <Gallery photos={item.photoUrls} alt={item.name} className="h-18 w-18" />}
       <div className="min-w-0 flex-1">
-        <h3 className="font-display text-2xl font-bold uppercase leading-tight">{item.name}</h3>
+        <h3 className="sign text-xl leading-tight text-sand">{item.name}</h3>
         {item.description && <p className="mt-0.5 text-sm leading-snug text-mute">{item.description}</p>}
         {item.kind === 'servico' && item.durationMinutes > 0 && (
           <p className="mt-1.5 inline-flex items-center gap-1 text-xs text-mute">
@@ -34,11 +27,11 @@ function Row({ item, i }: { item: MenuItem; i: number }) {
           </p>
         )}
       </div>
-      <div className="shrink-0 text-right font-display text-2xl font-bold leading-tight text-gold">
-        {item.priceType === 'from' && (
-          <div className="text-[10px] font-semibold uppercase tracking-widest text-gold-dim">a partir de</div>
-        )}
-        {moneyShort(item.priceCents)}
+      <div className="figures shrink-0 text-right text-gold">
+        {item.priceType === 'from' && <div className="text-xs text-gold-dim">a partir de</div>}
+        <span className="sign text-2xl leading-tight">
+          {moneyShort(item.priceCents)}
+        </span>
       </div>
     </Appear>
   )
@@ -54,16 +47,14 @@ export default function Menu() {
   return (
     <div className="mx-auto min-h-dvh max-w-md pb-32">
       <header className="relative overflow-hidden border-b border-line px-5 pb-8 pt-10">
-        <div aria-hidden className="absolute -right-10 -top-10 h-44 w-44 rounded-full border border-gold/20" />
-        <div aria-hidden className="absolute -right-4 -top-4 h-44 w-44 rounded-full border border-gold/10" />
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4 }}>
           <Wordmark />
         </motion.div>
         <p className="mt-6 max-w-[17rem] text-base text-sand/80">
           Cabelo, barba e sobrancelha em {settings.city}.
         </p>
-        <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-line bg-coal/70 px-3 py-1.5 text-xs text-mute">
-          <CalendarClock className="h-3.5 w-3.5 text-gold" aria-hidden />
+        <p className="mt-3 flex items-center gap-2 text-sm text-mute">
+          <CalendarClock className="h-4 w-4 text-gold" aria-hidden />
           Agenda aberta para as próximas {settings.horizonWeeks} semanas
         </p>
       </header>
@@ -72,11 +63,11 @@ export default function Menu() {
         <motion.div
           initial={{ opacity: 0, y: -6 }}
           animate={{ opacity: 1, y: 0 }}
-          className="mx-5 mt-5 flex gap-3 rounded-2xl border border-gold/30 bg-gold/5 p-4 text-sm text-sand"
+          className="mx-5 mt-5 flex gap-3 rounded-lg border border-gold/30 bg-gold/5 p-4 text-sm text-sand"
         >
           <Megaphone className="mt-0.5 h-5 w-5 shrink-0 text-gold" aria-hidden />
           <div>
-            <p className="font-display font-bold uppercase tracking-wide text-gold">Aviso de hoje</p>
+            <p className="sign text-lg leading-none text-gold">Aviso de hoje</p>
             <p className="mt-0.5">{notice}</p>
           </div>
         </motion.div>

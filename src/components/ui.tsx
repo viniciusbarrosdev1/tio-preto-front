@@ -24,10 +24,10 @@ type BtnProps = HTMLMotionProps<'button'> & {
 }
 
 const btnBase =
-  'relative inline-flex items-center justify-center gap-2 rounded-xl font-display font-bold uppercase tracking-wide disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer select-none'
+  'relative inline-flex items-center justify-center gap-2 rounded-md font-display font-semibold uppercase tracking-[0.01em] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer select-none'
 
 const variants = {
-  gold: 'bg-gold text-ink shadow-[0_6px_20px_-10px_rgba(212,169,79,0.9)] hover:bg-[#e6bd63]',
+  gold: 'bg-gold text-ink hover:bg-[#d99557]',
   ghost: 'border border-line bg-coal/40 text-sand hover:border-gold/70 hover:text-gold',
   quiet: 'text-mute hover:text-sand',
   danger: 'border border-danger/50 bg-danger/5 text-danger hover:bg-danger/15',
@@ -216,7 +216,7 @@ export function Badge({ tone = 'mute', children }: { tone?: 'mute' | 'gold' | 'o
   return (
     <span
       className={cx(
-        'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold uppercase tracking-wide',
+        'inline-flex items-center rounded-md border px-2.5 py-0.5 text-xs font-semibold uppercase',
         tone === 'mute' && 'border-line text-mute',
         tone === 'gold' && 'border-gold/50 bg-gold/10 text-gold',
         tone === 'ok' && 'border-ok/50 bg-ok/10 text-ok',
@@ -229,7 +229,7 @@ export function Badge({ tone = 'mute', children }: { tone?: 'mute' | 'gold' | 'o
 }
 
 export const Card = ({ className, ...p }: HTMLMotionProps<'div'>) => (
-  <motion.div {...p} className={cx('rounded-2xl border border-line bg-panel/90 p-4 shadow-[0_1px_0_0_rgba(255,255,255,0.03)_inset]', className)} />
+  <motion.div {...p} className={cx('rounded-lg border border-line bg-panel p-4', className)} />
 )
 
 /** Entrada em cascata para listas. */
@@ -246,7 +246,7 @@ export const Appear = ({ i = 0, className, ...p }: HTMLMotionProps<'div'> & { i?
 export function SectionTitle({ children, right }: { children: ReactNode; right?: ReactNode }) {
   return (
     <div className="mb-3 flex items-baseline justify-between gap-3">
-      <h2 className="font-display text-sm font-semibold uppercase tracking-[0.3em] text-gold">{children}</h2>
+      <h2 className="sign text-2xl leading-none text-sand">{children}</h2>
       {right}
     </div>
   )
@@ -335,10 +335,10 @@ export function Modal({
             exit={{ y: 24, opacity: 0 }}
             transition={spring}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-3xl border border-line bg-panel p-5 pb-8 sm:rounded-3xl sm:pb-5"
+            className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-xl border border-line bg-panel p-5 pb-8 sm:rounded-xl sm:pb-5"
           >
             <div className="mb-4 flex items-center justify-between gap-3">
-              <h2 className="font-display text-2xl font-bold uppercase text-gold">{title}</h2>
+              <h2 className="sign text-2xl text-sand">{title}</h2>
               <button onClick={onClose} aria-label="Fechar" className="cursor-pointer rounded-lg p-2 text-mute hover:bg-coal hover:text-sand">
                 ✕
               </button>
@@ -429,10 +429,8 @@ export function WaNotice({
 export function Wordmark({ small }: { small?: boolean }) {
   return (
     <div className="leading-none">
-      <div className={cx('font-display font-extrabold uppercase tracking-[0.08em] text-gold', small ? 'text-xl' : 'text-5xl')}>
-        Tio Preto
-      </div>
-      <div className={cx('font-display font-semibold uppercase tracking-[0.35em] text-sand/70', small ? 'text-[10px]' : 'mt-1 text-sm')}>
+      <div className={cx('sign text-gold', small ? 'text-2xl' : 'text-6xl')}>Tio Preto</div>
+      <div className={cx('font-display font-medium uppercase text-sand/70', small ? 'mt-0.5 text-[11px]' : 'mt-1.5 text-sm')}>
         Barbearia
       </div>
     </div>

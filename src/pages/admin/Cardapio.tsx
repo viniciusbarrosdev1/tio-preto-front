@@ -122,7 +122,7 @@ export default function Cardapio() {
   return (
     <div className="space-y-5">
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl font-extrabold uppercase">Cardápio</h1>
+        <h1 className="sign text-3xl">Cardápio</h1>
         <Btn
           size="sm"
           onClick={() => {
@@ -162,7 +162,7 @@ export default function Cardapio() {
                 </div>
               )}
               <div className="min-w-0 flex-1">
-                <p className="truncate font-display text-xl font-bold uppercase leading-tight">{m.name}</p>
+                <p className="truncate sign text-lg leading-tight">{m.name}</p>
                 <p className="text-sm text-gold">
                   {priceLabel(m.priceCents, m.priceType)}
                   {m.kind === 'servico' && <span className="text-mute"> · {durationLabel(m.durationMinutes)}</span>}
