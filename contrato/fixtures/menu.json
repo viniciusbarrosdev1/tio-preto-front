@@ -56,7 +56,11 @@
     "priceType": "fixed",
     "durationMinutes": 30,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/barba-1.jpg",
+      "./fotos/barba-2.jpg",
+      "./fotos/barba-3.jpg"
+    ]
   },
   {
     "id": "svc-sobrancelha-navalha",
@@ -68,7 +72,11 @@
     "priceType": "fixed",
     "durationMinutes": 15,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/sobrancelha-navalha-1.jpg",
+      "./fotos/sobrancelha-navalha-2.jpg",
+      "./fotos/sobrancelha-navalha-3.jpg"
+    ]
   },
   {
     "id": "svc-sobrancelha-cera",
@@ -80,7 +88,11 @@
     "priceType": "fixed",
     "durationMinutes": 15,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/sobrancelha-cera-1.jpg",
+      "./fotos/sobrancelha-cera-2.jpg",
+      "./fotos/sobrancelha-cera-3.jpg"
+    ]
   },
   {
     "id": "prod-pomada",

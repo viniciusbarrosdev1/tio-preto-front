@@ -20,7 +20,7 @@ export interface State {
   blockedNumbers: string[]
 }
 
-const KEY = 'tio-preto-proto-v5'
+const KEY = 'tio-preto-proto-v6'
 
 export const uid = (prefix: string) =>
   `${prefix}-${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-3)}`
