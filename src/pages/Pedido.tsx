@@ -1,10 +1,10 @@
-import { ArrowLeft, Camera, Check, Clock, Phone } from 'lucide-react'
+import { ArrowLeft, Check, Clock } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams, useSearchParams } from 'react-router-dom'
-import { Appear, Badge, Btn, Card, Loading, SectionTitle, Spinner, cx, spring, useToast } from '@/components/ui'
+import { Badge, Btn, Card, Loading, Spinner, cx, spring, useToast } from '@/components/ui'
 import { api, cancelDeadlineAt, durationFor, openDates, priceOf, serviceName } from '@/lib/api'
-import { dateKey, dayMonth, durationLabel, fmtDateTime, fmtTime, moneyShort, waLink, weekdayName } from '@/lib/format'
+import { dateKey, dayMonth, durationLabel, fmtDateTime, fmtTime, moneyShort, weekdayName } from '@/lib/format'
 import { useAppState } from '@/lib/store'
 import { ApiError, type BookingRequest, type Slot } from '@/lib/types'
 
@@ -138,46 +138,6 @@ export default function Pedido() {
           </div>
         </Card>
       )}
-
-      <section className="mt-6">
-        <SectionTitle>Mensagens no seu WhatsApp</SectionTitle>
-        <p className="mb-3 text-sm text-mute">Enviadas automaticamente a cada passo do pedido. No protótipo, ficam só aqui.</p>
-        <div className="space-y-2">
-          {r.messages.map((m, i) => (
-            <Appear key={`${m.at}-${i}`} i={i} className="rounded-xl border border-line bg-coal/40 p-3">
-              <p className="text-sm text-sand/90">{m.text}</p>
-              <p className="mt-1 text-[11px] uppercase tracking-wide text-mute">{fmtDateTime(m.at)}</p>
-            </Appear>
-          ))}
-        </div>
-      </section>
-
-      <Card className="mt-6 space-y-3 border-gold/25">
-        <p className="flex items-center gap-2 font-display font-bold uppercase tracking-wide text-gold">
-          <Camera className="h-4 w-4" aria-hidden /> Guarde esta página
-        </p>
-        <p className="text-sm text-sand/90">
-          Tire um print desta tela. É por aqui que você acompanha, cancela ou remarca seu horário.
-        </p>
-        <p className="flex items-start gap-2 text-sm text-mute">
-          <Phone className="mt-0.5 h-4 w-4 shrink-0" aria-hidden />
-          <span>
-            Digitou o número errado ou não recebeu a confirmação no WhatsApp?{' '}
-            <a
-              href={waLink(
-                settings.whatsapp,
-                `Olá, pedi horário de ${names} para ${weekdayName(dateKey(r.startAt))}, ${dayMonth(dateKey(r.startAt))} às ${fmtTime(r.startAt)} no nome de ${r.clientName}, mas não recebi a confirmação no WhatsApp.`,
-              )}
-              target="_blank"
-              rel="noreferrer"
-              className="font-semibold text-gold underline underline-offset-2"
-            >
-              fale com a gente no WhatsApp
-            </a>{' '}
-            que resolvemos para você.
-          </span>
-        </p>
-      </Card>
 
       {(r.status === 'confirmado' || r.status === 'pendente') && (
         <Card className="mt-4 space-y-3">

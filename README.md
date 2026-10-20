@@ -21,9 +21,8 @@ Outros comandos: `npm run build`, `npm run lint`.
 - Agendar horário (`#/agendar`): escolhe **um** item por tipo (um cabelo, barba, uma sobrancelha),
   vê a duração e o total, escolhe dia e horário, preenche nome e WhatsApp com máscara, lê a regra
   de falta e aceita o uso dos dados (LGPD).
-- Seu pedido (`#/pedido/:token`): acompanha, cancela ou remarca, vê as mensagens que foram para o
-  WhatsApp e é instruído a tirar um print da página. Se errou o número, tem link para falar no
-  WhatsApp com mensagem pronta.
+- Seu pedido (`#/pedido/:token`): acompanha o estado do pedido, cancela ou remarca. O aviso de
+  cada mudança chega pelo WhatsApp, não pela tela.
 - Número bloqueado não consegue pedir pelo site: cai numa tela que manda falar no WhatsApp,
   com a mensagem já escrita.
 
