@@ -1,25 +1,75 @@
 @import 'tailwindcss';
 
-@theme {
-  --color-ink: #16110e;
-  --color-coal: #1f1813;
-  --color-panel: #261e18;
-  --color-line: #3a2e26;
-  --color-gold: #cb8445;
-  --color-gold-dim: #96602f;
-  --color-sand: #f1e7d9;
-  --color-mute: #a89684;
-  --color-danger: #d4573f;
-  --color-ok: #8aa667;
+/*
+  Dois temas na mesma estrutura. O claro é o padrão; o escuro é o que já existia.
+  As cores vivem em variáveis no :root e o Tailwind só aponta para elas (@theme inline),
+  então trocar o tema é trocar um atributo no <html>, sem recarregar nada.
+
+  --color-ink é sempre a tinta escura (texto em cima do dourado, por exemplo).
+  --color-bg, --color-panel e --color-coal é que mudam de lado no tema claro.
+*/
+@custom-variant dark (&:where([data-theme='dark'], [data-theme='dark'] *));
+
+@theme inline {
+  --color-bg: var(--c-bg);
+  --color-ink: var(--c-ink);
+  --color-coal: var(--c-coal);
+  --color-panel: var(--c-panel);
+  --color-line: var(--c-line);
+  --color-gold: var(--c-gold);
+  --color-gold-fill: var(--c-gold-fill);
+  --color-gold-strong: var(--c-gold-strong);
+  --color-gold-dim: var(--c-gold-dim);
+  --color-sand: var(--c-sand);
+  --color-mute: var(--c-mute);
+  --color-danger: var(--c-danger);
+  --color-ok: var(--c-ok);
   --font-sign: 'Alfa Slab One', 'Rockwell', Georgia, serif;
   --font-display: 'Archivo', system-ui, sans-serif;
   --font-sans: 'Archivo', system-ui, sans-serif;
 }
 
-html {
+/* tema claro: papel quente, cartões brancos, tinta preta e o dourado da placa */
+:root {
+  color-scheme: light;
+  --c-bg: #f6f2ea;
+  --c-ink: #16110e;
+  --c-coal: #ece5d8;
+  --c-panel: #ffffff;
+  --c-line: #e0d6c3;
+  --c-gold: #8a5a14;
+  --c-gold-fill: #e0a83d;
+  --c-gold-strong: #b4791b;
+  --c-gold-dim: #7a5214;
+  --c-sand: #1c1613;
+  --c-mute: #6f6253;
+  --c-danger: #b2381c;
+  --c-ok: #4a6e2a;
+  --c-shadow: 0 1px 2px rgba(28, 22, 19, 0.06), 0 8px 24px -16px rgba(28, 22, 19, 0.35);
+}
+
+/* tema escuro: o que já estava no ar */
+:root[data-theme='dark'] {
   color-scheme: dark;
-  background: var(--color-ink);
-  color: var(--color-sand);
+  --c-bg: #16110e;
+  --c-ink: #16110e;
+  --c-coal: #1f1813;
+  --c-panel: #261e18;
+  --c-line: #3a2e26;
+  --c-gold: #cb8445;
+  --c-gold-fill: #cb8445;
+  --c-gold-strong: #cb8445;
+  --c-gold-dim: #96602f;
+  --c-sand: #f1e7d9;
+  --c-mute: #a89684;
+  --c-danger: #d4573f;
+  --c-ok: #8aa667;
+  --c-shadow: none;
+}
+
+html {
+  background: var(--c-bg);
+  color: var(--c-sand);
   font-family: var(--font-sans);
   -webkit-tap-highlight-color: transparent;
   scroll-behavior: smooth;
@@ -28,17 +78,22 @@ html {
 body {
   min-height: 100dvh;
   margin: 0;
-  background: var(--color-ink);
+  background: var(--c-bg);
 }
 
 ::selection {
-  background: var(--color-gold);
-  color: var(--color-ink);
+  background: var(--c-gold-fill);
+  color: var(--c-ink);
 }
 
 :focus-visible {
-  outline: 2px solid var(--color-gold);
+  outline: 2px solid var(--c-gold);
   outline-offset: 2px;
+}
+
+/* no claro o cartão branco se separa do fundo pela sombra, não pela linha */
+.lift {
+  box-shadow: var(--c-shadow);
 }
 
 /* a tipografia de placa: marca, títulos e preços */
@@ -60,7 +115,7 @@ body {
   overflow-x: auto;
   scroll-snap-type: x proximity;
   scrollbar-width: thin;
-  scrollbar-color: var(--color-line) transparent;
+  scrollbar-color: var(--c-line) transparent;
   padding-bottom: 0.25rem;
 }
 
@@ -73,7 +128,7 @@ body {
 }
 
 .strip::-webkit-scrollbar-thumb {
-  background: var(--color-line);
+  background: var(--c-line);
   border-radius: 999px;
 }
 

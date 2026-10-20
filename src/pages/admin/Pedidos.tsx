@@ -43,7 +43,7 @@ export default function Pedidos() {
           </div>
           <Badge tone={r.status === 'pendente' ? 'gold' : 'mute'}>{serviceName(r.itemIds, menu)}</Badge>
         </div>
-        <p className="sign text-xl leading-tight text-gold first-letter:uppercase">
+        <p className="sign text-xl leading-tight text-gold-strong first-letter:uppercase">
           {weekdayName(r.startAt.slice(0, 10))}, {dayMonth(r.startAt.slice(0, 10))} às {fmtTime(r.startAt)}
         </p>
         <p className="flex flex-wrap items-center gap-x-3 text-sm text-mute">
@@ -209,7 +209,7 @@ export default function Pedidos() {
                   onClick={() => setPDate(d)}
                   className={cx(
                     'flex min-w-16 shrink-0 cursor-pointer flex-col items-center rounded-xl border px-3 py-2',
-                    pDate === d ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/30',
+                    pDate === d ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/30',
                   )}
                 >
                   <span className="text-[11px] uppercase">{weekdayName(d).slice(0, 3)}</span>

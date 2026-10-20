@@ -20,7 +20,7 @@ export interface State {
   blockedNumbers: string[]
 }
 
-const KEY = 'tio-preto-proto-v6'
+const KEY = 'tio-preto-proto-v7'
 
 export const uid = (prefix: string) =>
   `${prefix}-${Math.random().toString(36).slice(2, 8)}${Date.now().toString(36).slice(-3)}`
@@ -72,6 +72,8 @@ function seed(): State {
 
 function load(): State {
   try {
+    // protótipo: versões antigas do seed só ocupam espaço
+    for (const k of Object.keys(localStorage)) if (k.startsWith('tio-preto-proto-') && k !== KEY) localStorage.removeItem(k)
     const raw = localStorage.getItem(KEY)
     if (raw) {
       const s = JSON.parse(raw) as State

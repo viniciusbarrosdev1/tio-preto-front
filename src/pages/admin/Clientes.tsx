@@ -199,7 +199,7 @@ export default function Clientes() {
                   <div key={r.id} className="rounded-xl border border-line bg-coal/40 p-3">
                     <div className="flex items-start justify-between gap-3">
                       <div className="min-w-0">
-                        <p className="sign text-base leading-tight text-gold">{fmtDateTime(r.startAt)}</p>
+                        <p className="sign text-base leading-tight text-gold-strong">{fmtDateTime(r.startAt)}</p>
                         <p className="text-sm text-sand/90">{serviceName(r.itemIds, menu)}</p>
                         <p className="mt-0.5 flex flex-wrap items-center gap-x-2 text-xs text-mute">
                           <span className="inline-flex items-center gap-1">

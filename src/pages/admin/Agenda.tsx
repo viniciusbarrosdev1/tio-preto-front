@@ -151,7 +151,7 @@ export default function Agenda() {
                   aria-label={`${weekdayLong(d)}${n > 0 ? `, ${n} marcado${n > 1 ? 's' : ''}` : ''}`}
                   className={cx(
                     'relative flex min-w-17 shrink-0 cursor-pointer flex-col items-center rounded-xl border px-3 py-2.5',
-                    on ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/30 hover:border-gold/50',
+                    on ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/30 hover:border-gold/50',
                     !on && d < todayKey() && 'opacity-60',
                   )}
                 >
@@ -163,7 +163,7 @@ export default function Agenda() {
                   {n > 0 && (
                     <span
                       aria-hidden
-                      className={cx('absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full', on ? 'bg-ink' : 'bg-gold')}
+                      className={cx('absolute right-1.5 top-1.5 h-1.5 w-1.5 rounded-full', on ? 'bg-ink' : 'bg-gold-fill')}
                     />
                   )}
                 </motion.button>
@@ -399,7 +399,7 @@ function ManualModal({ open, onClose, date }: { open: boolean; onClose: () => vo
                   aria-pressed={on}
                   className={cx(
                     'cursor-pointer rounded-full border px-3 py-1.5 text-sm',
-                    on ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/30 text-sand hover:border-gold/60',
+                    on ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/30 text-sand hover:border-gold/60',
                   )}
                 >
                   {m.name}

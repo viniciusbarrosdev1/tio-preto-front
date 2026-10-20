@@ -22,9 +22,11 @@ o que muda se a resposta for outra. Levar esta lista para a reunião e marcar o 
 
 ## 2. Produtos
 
-- [ ] **Quais produtos ele vende?** O cardápio já tem a aba Produtos separada dos Serviços
-      (produto não ocupa horário). Os dois que estão lá — pomada e óleo — são **exemplos**
-      para ele ver o formato. Ele cadastra os dele no painel.
+- [ ] **Preço da pomada e do óleo.** As fotos e as descrições vieram dele (pomada modeladora,
+      efeito teia, média fixação, 85 g; óleo para barba, hidratação e brilho, 30 ml), mas os
+      preços no ar — R$ 35 e R$ 30 — ainda são **chute nosso**. Confirmar os dois.
+- [ ] **Vende mais alguma coisa?** A aba Produtos aguenta quantos ele quiser, e produto não
+      ocupa horário na agenda.
 - [ ] **Preço de produto também aparece para o cliente?** Hoje aparece, junto do cardápio.
 
 ## 3. Fotos

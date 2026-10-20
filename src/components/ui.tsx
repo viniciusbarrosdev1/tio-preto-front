@@ -9,9 +9,44 @@ import {
   type ComponentProps,
   type ReactNode,
 } from 'react'
+import { Moon, Sun } from 'lucide-react'
 import { fmtDateTime, maskMoney, maskPhone } from '@/lib/format'
+import { toggleTheme, useTheme } from '@/lib/theme'
 
 export const cx = (...c: (string | false | undefined | null)[]) => c.filter(Boolean).join(' ')
+
+/** Claro é o padrão; a escolha fica guardada no aparelho de quem usa. */
+export function ThemeToggle({ className }: { className?: string }) {
+  const theme = useTheme()
+  const escuro = theme === 'escuro'
+  return (
+    <motion.button
+      type="button"
+      onClick={toggleTheme}
+      whileTap={{ scale: 0.94 }}
+      transition={spring}
+      aria-label={escuro ? 'Mudar para o modo claro' : 'Mudar para o modo escuro'}
+      title={escuro ? 'Modo claro' : 'Modo escuro'}
+      className={cx(
+        'inline-flex h-10 w-10 cursor-pointer items-center justify-center rounded-md border border-line bg-panel text-mute hover:text-gold',
+        className,
+      )}
+    >
+      <AnimatePresence initial={false} mode="wait">
+        <motion.span
+          key={theme}
+          initial={{ opacity: 0, rotate: -40, scale: 0.8 }}
+          animate={{ opacity: 1, rotate: 0, scale: 1 }}
+          exit={{ opacity: 0, rotate: 40, scale: 0.8 }}
+          transition={{ duration: 0.18 }}
+          className="inline-flex"
+        >
+          {escuro ? <Sun className="h-5 w-5" aria-hidden /> : <Moon className="h-5 w-5" aria-hidden />}
+        </motion.span>
+      </AnimatePresence>
+    </motion.button>
+  )
+}
 
 export const spring = { type: 'spring', stiffness: 420, damping: 32, mass: 0.7 } as const
 
@@ -27,10 +62,10 @@ const btnBase =
   'relative inline-flex items-center justify-center gap-2 rounded-md font-display font-semibold uppercase tracking-[0.01em] disabled:opacity-40 disabled:cursor-not-allowed cursor-pointer select-none'
 
 const variants = {
-  gold: 'bg-gold text-ink hover:bg-[#d99557]',
+  gold: 'bg-gold-fill text-ink hover:brightness-95',
   ghost: 'border border-line bg-coal/40 text-sand hover:border-gold/70 hover:text-gold',
   quiet: 'text-mute hover:text-sand',
-  danger: 'border border-danger/50 bg-danger/5 text-danger hover:bg-danger/15',
+  danger: 'border border-danger/50 bg-danger/8 text-danger hover:bg-danger/15',
 }
 
 export function Btn({ variant = 'gold', size = 'md', loading, className, children, ...p }: BtnProps) {
@@ -171,7 +206,7 @@ export function Switch({ checked, onChange, label }: { checked: boolean; onChang
     >
       <span className="text-sm text-sand">{label}</span>
       <span className={cx('flex h-7 w-12 shrink-0 items-center rounded-full border p-0.5', checked ? 'border-gold bg-gold/30' : 'border-line bg-coal')}>
-        <motion.span layout transition={spring} className={cx('h-5 w-5 rounded-full', checked ? 'ml-auto bg-gold' : 'bg-mute')} />
+        <motion.span layout transition={spring} className={cx('h-5 w-5 rounded-full', checked ? 'ml-auto bg-gold-fill' : 'bg-mute')} />
       </span>
     </button>
   )
@@ -201,7 +236,7 @@ export function Segmented<T extends string>({
           )}
         >
           {value === o.value && (
-            <motion.span layoutId={`seg-${id}`} transition={spring} className="absolute inset-0 rounded-lg bg-gold" />
+            <motion.span layoutId={`seg-${id}`} transition={spring} className="absolute inset-0 rounded-lg bg-gold-fill" />
           )}
           <span className="relative">{o.label}</span>
         </button>
@@ -229,7 +264,7 @@ export function Badge({ tone = 'mute', children }: { tone?: 'mute' | 'gold' | 'o
 }
 
 export const Card = ({ className, ...p }: HTMLMotionProps<'div'>) => (
-  <motion.div {...p} className={cx('rounded-lg border border-line bg-panel p-4', className)} />
+  <motion.div {...p} className={cx('lift rounded-lg border border-line bg-panel p-4', className)} />
 )
 
 /** Entrada em cascata para listas. */
@@ -283,8 +318,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
               exit={{ opacity: 0, y: 8, scale: 0.96 }}
               transition={spring}
               className={cx(
-                'pointer-events-auto max-w-sm rounded-xl border px-4 py-3 text-sm shadow-2xl backdrop-blur',
-                t.tone === 'ok' ? 'border-gold/50 bg-coal/95 text-sand' : 'border-danger/60 bg-coal/95 text-danger',
+                'lift pointer-events-auto max-w-sm rounded-xl border px-4 py-3 text-sm',
+                t.tone === 'ok' ? 'border-gold/50 bg-panel text-sand' : 'border-danger/60 bg-panel text-danger',
               )}
             >
               {t.msg}
@@ -323,7 +358,7 @@ export function Modal({
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          className="fixed inset-0 z-40 flex items-end justify-center bg-black/75 backdrop-blur-sm sm:items-center"
+          className="fixed inset-0 z-40 flex items-end justify-center bg-[#16110e]/70 backdrop-blur-sm sm:items-center"
           onClick={onClose}
         >
           <motion.div
@@ -335,7 +370,7 @@ export function Modal({
             exit={{ y: 24, opacity: 0 }}
             transition={spring}
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-xl border border-line bg-panel p-5 pb-8 sm:rounded-xl sm:pb-5"
+            className="lift max-h-[92dvh] w-full max-w-lg overflow-y-auto rounded-t-xl border border-line bg-panel p-5 pb-8 sm:rounded-xl sm:pb-5"
           >
             <div className="mb-4 flex items-center justify-between gap-3">
               <h2 className="sign text-2xl text-sand">{title}</h2>
@@ -379,12 +414,12 @@ export function Gallery({ photos, alt, className }: { photos: string[]; alt: str
       </AnimatePresence>
       {photos.length > 1 && (
         <>
-          <span className="absolute right-1 top-1 rounded bg-ink/75 px-1.5 py-0.5 text-[10px] font-semibold text-sand">
+          <span className="absolute right-1 top-1 rounded bg-[#16110e]/75 px-1.5 py-0.5 text-[10px] font-semibold text-white">
             {i + 1}/{photos.length}
           </span>
           <span className="absolute inset-x-0 bottom-1.5 flex justify-center gap-1">
             {photos.map((p, j) => (
-              <span key={p} className={cx('h-1.5 w-4 rounded-full', j === i ? 'bg-gold' : 'bg-sand/35')} />
+              <span key={p} className={cx('h-1.5 w-4 rounded-full', j === i ? 'bg-gold-fill' : 'bg-white/50')} />
             ))}
           </span>
         </>

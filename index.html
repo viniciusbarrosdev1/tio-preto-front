@@ -4,8 +4,17 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#16110e" />
+    <meta name="theme-color" content="#f6f2ea" />
     <meta name="description" content="Barbearia Tio Preto - cardápio, preços e agendamento." />
+    <script>
+      // pinta o tema antes do primeiro quadro, para não piscar branco quem escolheu o escuro
+      try {
+        if (localStorage.getItem('tio-preto-tema') === 'escuro') {
+          document.documentElement.setAttribute('data-theme', 'dark')
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#16110e')
+        }
+      } catch (e) {}
+    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Archivo:wght@400;500;600;700&display=swap" rel="stylesheet" />

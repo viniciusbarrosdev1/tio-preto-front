@@ -39,7 +39,7 @@ export default function SlotPicker({
             aria-pressed={d === x}
             className={cx(
               'flex min-w-16 shrink-0 cursor-pointer flex-col items-center rounded-xl border px-3 py-2',
-              d === x ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/30 hover:border-gold/50',
+              d === x ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/30 hover:border-gold/50',
             )}
           >
             <span className="text-[11px] uppercase">{weekdayName(x).slice(0, 3)}</span>

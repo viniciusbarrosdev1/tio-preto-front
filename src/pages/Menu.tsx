@@ -1,9 +1,10 @@
 import { CalendarClock, Clock, MapPin, Megaphone, MessageCircle } from 'lucide-react'
 import { motion } from 'motion/react'
 import { activeNotice } from '@/lib/api'
-import { Appear, Gallery, LinkBtn, SectionTitle } from '@/components/ui'
+import { Appear, Gallery, LinkBtn, SectionTitle, ThemeToggle } from '@/components/ui'
 import { durationLabel, moneyShort, waLink } from '@/lib/format'
 import { useAppState } from '@/lib/store'
+import { useTheme } from '@/lib/theme'
 import type { MenuItem } from '@/lib/types'
 
 const Instagram = ({ className }: { className?: string }) => (
@@ -27,7 +28,7 @@ function Row({ item, i }: { item: MenuItem; i: number }) {
           </p>
         )}
       </div>
-      <div className="figures shrink-0 text-right text-gold">
+      <div className="figures shrink-0 text-right text-gold-strong">
         {item.priceType === 'from' && <div className="text-xs text-gold-dim">a partir de</div>}
         <span className="sign text-2xl leading-tight">
           {moneyShort(item.priceCents)}
@@ -43,20 +44,23 @@ export default function Menu() {
   const servicos = visible.filter((m) => m.kind === 'servico')
   const produtos = visible.filter((m) => m.kind === 'produto')
   const notice = activeNotice(settings)
+  const tema = useTheme()
 
   return (
     <div className="mx-auto min-h-dvh max-w-md pb-32">
-      <header className="border-b border-line">
+      <header className="relative border-b border-line bg-[#fefefe] dark:bg-[#130f0c]">
         <motion.img
+          key={tema}
           initial={{ opacity: 0, scale: 1.02 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-          src="./fotos/logo.png"
-          width={600}
-          height={500}
+          src={tema === 'escuro' ? './fotos/logo.png' : './fotos/logo-clara.png'}
+          width={900}
+          height={744}
           alt="Tio Preto Barbearia"
           className="block w-full"
         />
+        <ThemeToggle className="absolute right-3 top-3 bg-panel/90 text-sand" />
         <div className="px-5 pb-7 pt-6">
           <p className="max-w-[19rem] text-base text-sand/85">Cabelo, barba e sobrancelha em {settings.city}.</p>
           <p className="mt-3 flex items-center gap-2 text-sm text-mute">
@@ -74,7 +78,7 @@ export default function Menu() {
         >
           <Megaphone className="mt-0.5 h-5 w-5 shrink-0 text-gold" aria-hidden />
           <div>
-            <p className="sign text-lg leading-none text-gold">Aviso de hoje</p>
+            <p className="sign text-lg leading-none text-gold-strong">Aviso de hoje</p>
             <p className="mt-0.5">{notice}</p>
           </div>
         </motion.div>
@@ -121,7 +125,7 @@ export default function Menu() {
         </footer>
       </main>
 
-      <div className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ink/95 px-5 pt-3 safe-bottom backdrop-blur">
+      <div className="no-print fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg/95 px-5 pt-3 safe-bottom backdrop-blur">
         <div className="mx-auto max-w-md">
           <LinkBtn variant="gold" href="#/agendar" className="w-full">
             <CalendarClock className="h-5 w-5" aria-hidden /> Agendar horário

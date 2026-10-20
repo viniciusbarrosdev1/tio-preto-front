@@ -98,22 +98,26 @@
     "id": "prod-pomada",
     "kind": "produto",
     "name": "Pomada modeladora",
-    "description": "Exemplo de produto. Os de verdade entram pelo painel.",
+    "description": "Efeito teia, média fixação, sem resíduos. 85 g.",
     "priceCents": 3500,
     "priceType": "fixed",
     "durationMinutes": 0,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/pomada-1.jpg"
+    ]
   },
   {
     "id": "prod-oleo-barba",
     "kind": "produto",
     "name": "Óleo para barba",
-    "description": "Exemplo de produto. Os de verdade entram pelo painel.",
+    "description": "Hidratação e brilho para a barba. 30 ml.",
     "priceCents": 3000,
     "priceType": "fixed",
     "durationMinutes": 0,
     "visible": true,
-    "photoUrls": []
+    "photoUrls": [
+      "./fotos/oleo-barba-1.jpg"
+    ]
   }
 ]

@@ -86,12 +86,12 @@ export default function Pedido() {
               initial={{ scale: 0.4, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               transition={{ ...spring, delay: 0.1 }}
-              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold text-ink"
+              className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-gold-fill text-ink"
             >
               <Check className="h-5 w-5" aria-hidden />
             </motion.span>
             <div className="text-sm">
-              <p className="sign text-base leading-none text-gold">Pedido enviado</p>
+              <p className="sign text-base leading-none text-gold-strong">Pedido enviado</p>
               <p className="mt-1 text-sand/90">Já saiu uma mensagem no seu WhatsApp.</p>
             </div>
           </motion.div>
@@ -103,7 +103,7 @@ export default function Pedido() {
           <span className="sign text-xl leading-tight">{names}</span>
           <Badge tone={info.tone}>{info.label}</Badge>
         </div>
-        <p className="sign text-2xl leading-tight text-gold first-letter:uppercase">
+        <p className="sign text-2xl leading-tight text-gold-strong first-letter:uppercase">
           {weekdayName(dateKey(r.startAt))}, {dayMonth(dateKey(r.startAt))} às {fmtTime(r.startAt)}
         </p>
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-mute">
@@ -180,7 +180,7 @@ export default function Pedido() {
                         onClick={() => setDate(d)}
                         className={cx(
                           'shrink-0 cursor-pointer rounded-xl border px-3 py-2 text-sm',
-                          date === d ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/30',
+                          date === d ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/30',
                         )}
                       >
                         {dayMonth(d)}

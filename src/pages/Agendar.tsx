@@ -108,7 +108,7 @@ export default function Agendar() {
     return (
       <Shell>
         <Card className="space-y-4">
-          <p className="flex items-center gap-2 sign text-lg text-gold">
+          <p className="flex items-center gap-2 sign text-lg text-gold-strong">
             <AlertTriangle className="h-5 w-5" aria-hidden /> Vamos resolver no WhatsApp
           </p>
           <p className="text-sm">{blocked}</p>
@@ -166,7 +166,7 @@ export default function Agendar() {
                           aria-hidden
                           className={cx(
                             'flex h-6 w-6 shrink-0 items-center justify-center rounded-full border',
-                            on ? 'border-gold bg-gold text-ink' : 'border-line text-transparent',
+                            on ? 'border-gold bg-gold-fill text-ink' : 'border-line text-transparent',
                           )}
                         >
                           <Check className="h-4 w-4" />
@@ -175,7 +175,7 @@ export default function Agendar() {
                           <span className="block sign text-lg leading-tight">{i.name}</span>
                           <span className="block text-xs text-mute">{durationLabel(i.durationMinutes)}</span>
                         </span>
-                        <span className="figures shrink-0 text-right text-gold">
+                        <span className="figures shrink-0 text-right text-gold-strong">
                           {i.priceType === 'from' && <span className="block text-[11px] text-gold-dim">a partir de</span>}
                           <span className="sign text-lg leading-none">{moneyShort(i.priceCents)}</span>
                         </span>
@@ -221,7 +221,7 @@ export default function Agendar() {
                   onClick={() => setDate(d)}
                   className={cx(
                     'flex min-w-17 shrink-0 cursor-pointer flex-col items-center rounded-xl border px-3 py-2.5',
-                    on ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/30 hover:border-gold/50',
+                    on ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/30 hover:border-gold/50',
                   )}
                 >
                   <span className="text-[11px] font-semibold uppercase">{weekdayName(d).slice(0, 3)}</span>
@@ -264,7 +264,7 @@ export default function Agendar() {
                       onClick={() => setStartAt(s.startAt)}
                       className={cx(
                         'relative min-h-12 cursor-pointer rounded-xl border font-display text-lg font-bold disabled:cursor-not-allowed disabled:border-line/60 disabled:bg-coal/20 disabled:text-mute/40 disabled:line-through',
-                        on ? 'border-gold bg-gold text-ink' : 'border-line bg-coal/40 hover:border-gold',
+                        on ? 'border-gold bg-gold-fill text-ink' : 'border-line bg-coal/40 hover:border-gold',
                       )}
                     >
                       {fmtTime(s.startAt)}
@@ -290,7 +290,7 @@ export default function Agendar() {
             <input tabIndex={-1} autoComplete="off" value={honeypot} onChange={(e) => setHoneypot(e.target.value)} name="site" />
           </div>
           <Card className="space-y-1 text-sm text-sand/90">
-            <p className="sign text-lg leading-none text-gold">Regra de falta</p>
+            <p className="sign text-lg leading-none text-gold-strong">Regra de falta</p>
             <p>{absenceRuleText(settings)}</p>
           </Card>
           <div>
@@ -302,7 +302,7 @@ export default function Agendar() {
           </div>
         </section>
 
-        <div className="no-print sticky bottom-0 -mx-5 border-t border-line bg-ink/95 px-5 pt-3 safe-bottom backdrop-blur">
+        <div className="no-print sticky bottom-0 -mx-5 border-t border-line bg-bg/95 px-5 pt-3 safe-bottom backdrop-blur">
           <AnimatePresence>
             {itemIds.length > 0 && (
               <motion.div
@@ -317,7 +317,7 @@ export default function Agendar() {
                     {itemIds.map((id) => servicos.find((s) => s.id === id)?.name).filter(Boolean).join(' + ')}
                   </span>
                 </span>
-                <span className="shrink-0 sign text-lg text-gold">
+                <span className="shrink-0 sign text-lg text-gold-strong">
                   {total.from ? 'a partir de ' : ''}
                   {moneyShort(total.cents)}
                 </span>

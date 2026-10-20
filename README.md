@@ -14,10 +14,19 @@ Outros comandos: `npm run build`, `npm run lint`.
 
 ## O que tem
 
+**Tema claro e escuro**
+
+O claro é o padrão. O botão fica no topo do cardápio e no cabeçalho do painel, e a escolha
+fica guardada no aparelho (`tio-preto-tema` no localStorage). As cores são variáveis em
+`src/index.css`: `:root` é o tema claro, `:root[data-theme='dark']` o escuro, e o Tailwind só
+aponta para elas (`@theme inline`) — mudar de tema não recarrega nada. A logo também troca:
+`fotos/logo-clara.png` no claro, `fotos/logo.png` no escuro.
+
 **Cliente**
 
-- Cardápio (`#/`): serviços e produtos separados, foto por item (toca na foto, vai para a próxima),
-  aviso do dia e a linha "agenda aberta para as próximas N semanas".
+- Cardápio (`#/`): a logo ocupa o topo inteiro, serviços e produtos separados, foto por item
+  (toca na foto, vai para a próxima), aviso do dia e a linha "agenda aberta para as próximas
+  N semanas".
 - Agendar horário (`#/agendar`): escolhe **um** item por tipo (um cabelo, barba, uma sobrancelha),
   vê a duração e o total, escolhe dia e horário, preenche nome e WhatsApp com máscara, lê a regra
   de falta e aceita o uso dos dados (LGPD).

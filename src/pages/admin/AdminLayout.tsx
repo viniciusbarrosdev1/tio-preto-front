@@ -1,7 +1,7 @@
 import { CalendarDays, ClipboardList, Clock, ExternalLink, LogOut, RotateCcw, Store, Users } from 'lucide-react'
 import { AnimatePresence, motion } from 'motion/react'
 import { Navigate, NavLink, Outlet, useLocation } from 'react-router-dom'
-import { Wordmark, cx, spring } from '@/components/ui'
+import { ThemeToggle, Wordmark, cx, spring } from '@/components/ui'
 import { api } from '@/lib/api'
 import { resetState, useAppState, useLogged } from '@/lib/store'
 
@@ -32,6 +32,7 @@ export default function AdminLayout() {
           <p className="mt-1 text-xs text-mute">Painel do dono</p>
         </div>
         <div className="flex items-center gap-1 text-sm text-mute">
+          <ThemeToggle className="border-0 bg-transparent" />
           <a href="#/" className="inline-flex min-h-10 items-center gap-1.5 rounded-lg px-2.5 hover:bg-coal hover:text-gold" title="Ver o site do cliente">
             <ExternalLink className="h-4 w-4" aria-hidden /> <span className="hidden sm:inline">Ver site</span>
           </a>
@@ -67,7 +68,7 @@ export default function AdminLayout() {
         </AnimatePresence>
       </main>
 
-      <nav aria-label="Painel" className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-ink/95 backdrop-blur">
+      <nav aria-label="Painel" className="fixed inset-x-0 bottom-0 z-30 border-t border-line bg-bg/95 backdrop-blur">
         <ul className="mx-auto flex max-w-3xl">
           {tabs.map(({ to, label, Icon, end }) => (
             <li key={to} className="flex-1">
@@ -84,7 +85,7 @@ export default function AdminLayout() {
                 {({ isActive }) => (
                   <>
                     {isActive && (
-                      <motion.span layoutId="tab-bar" transition={spring} className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-gold" />
+                      <motion.span layoutId="tab-bar" transition={spring} className="absolute inset-x-3 top-0 h-0.5 rounded-full bg-gold-fill" />
                     )}
                     <Icon className="h-5 w-5" aria-hidden />
                     {label}
@@ -93,7 +94,7 @@ export default function AdminLayout() {
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={spring}
-                        className="absolute right-[26%] top-2 min-w-4 rounded-full bg-gold px-1 text-center text-[10px] font-bold text-ink"
+                        className="absolute right-[26%] top-2 min-w-4 rounded-full bg-gold-fill px-1 text-center text-[10px] font-bold text-ink"
                       >
                         {counts[label]}
                       </motion.span>

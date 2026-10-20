@@ -136,7 +136,7 @@ export default function Horarios() {
         </Btn>
         {lastHints.length > 0 && (
           <Card className="text-sm text-mute">
-            <p className="sign text-lg leading-none text-gold">Até que hora o cliente consegue marcar</p>
+            <p className="sign text-lg leading-none text-gold-strong">Até que hora o cliente consegue marcar</p>
             <ul className="mt-1 space-y-0.5">
               {lastHints.map((x) => (
                 <li key={x.m}>
